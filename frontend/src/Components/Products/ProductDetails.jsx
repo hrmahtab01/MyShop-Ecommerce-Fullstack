@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
+import ProductGrid from "./ProductGrid";
 
 const ProductDetails = () => {
   const [mainimage, setMainimage] = useState(0);
@@ -34,11 +36,71 @@ const ProductDetails = () => {
   }, [setMainimage]);
 
   const handlesetQuantity = (action) => {
-    if (quantity > 1) {
-      if (action === "minus") setQuantity((prev) => prev - 1);
-    }
+    if (action === "minus" && quantity > 1) setQuantity((prev) => prev - 1);
+
     if (action === "plus") setQuantity((prev) => prev + 1);
   };
+  const HandleAddtoCart = () => {
+    if (!selectedColor || !selectedSize) {
+      toast.error("please select a size and color before adding to cart", {
+        duration: 1000,
+      });
+    }
+    setIsButtonDisable(true);
+    setTimeout(() => {
+      toast.success("product add to cart successfully", {
+        duration: 1000,
+      });
+      setIsButtonDisable(false);
+    }, 500);
+  };
+
+  const similarProducts = [
+    {
+      _id: 1,
+      name: "product 1 ",
+      price: 125,
+      images: [
+        {
+          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
+          alTtext: "product 1",
+        },
+      ],
+    },
+    {
+      _id: 2,
+      name: "product 2 ",
+      price: 125,
+      images: [
+        {
+          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
+          alTtext: "product 2",
+        },
+      ],
+    },
+    {
+      _id: 3,
+      name: "product 3 ",
+      price: 125,
+      images: [
+        {
+          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
+          alTtext: "product 3",
+        },
+      ],
+    },
+    {
+      _id: 4,
+      name: "product 4 ",
+      price: 125,
+      images: [
+        {
+          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
+          alTtext: "product 1",
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="p-6">
@@ -146,8 +208,16 @@ const ProductDetails = () => {
                 </button>
               </div>
             </div>
-            <button className="bg-teal-600 text-white py-2 px-6 rounded w-full mb-4 cursor-pointer hover:bg-black duration-300 uppercase">
-              Add to cart
+            <button
+              onClick={HandleAddtoCart}
+              disabled={isButtonDisable}
+              className={`bg-black text-white py-2 px-6 rounded w-full mb-4 cursor-pointer  duration-300 uppercase ${
+                isButtonDisable
+                  ? "cursor-not-allowed opacity-50"
+                  : "hover:bg-teal-600"
+              }`}
+            >
+              {isButtonDisable ? "adding..." : "Add to cart"}
             </button>
             <div className="mt-10 text-gray-700">
               <h3 className="text-xl font-bold mb-4">Characteristics</h3>
@@ -165,6 +235,12 @@ const ProductDetails = () => {
               </table>
             </div>
           </div>
+        </div>
+        <div className="mt-20">
+          <h2 className="text-2xl text-center font-medium mb-4">
+            You May Also Like
+          </h2>
+          <ProductGrid products={similarProducts} />
         </div>
       </div>
     </div>
