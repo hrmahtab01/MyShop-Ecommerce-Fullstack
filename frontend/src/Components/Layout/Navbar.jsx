@@ -27,16 +27,16 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden md:flex space-x-6">
-            <Link className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link to={"/collections/all"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
               Men
             </Link>
-            <Link className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link to={"/collections/all"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
               women
             </Link>
-            <Link className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link to={"/collections/topwear"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
               Top wear
             </Link>
-            <Link className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link to={"/collections/bottomwear"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
               bottom wear
             </Link>
           </div>
