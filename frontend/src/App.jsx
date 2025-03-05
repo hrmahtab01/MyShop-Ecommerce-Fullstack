@@ -4,6 +4,7 @@ import Userlayout from "./Components/Layout/Userlayout";
 import Home from "./Pages/Home";
 import { Toaster } from "sonner";
 import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           {/* <user layout /> */}
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Route>
         <Route>{/* <admin layout /> */}</Route>
       </Routes>

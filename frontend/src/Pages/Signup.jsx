@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 
-const Login = () => {
+const Signup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const HandleSubmit = (e) => {
+  const Handlesubmit = (e) => {
     e.preventDefault();
-    console.log("user login", email, password);
+    console.log("user signup", name, email, password);
   };
 
   return (
     <div className="flex">
       <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8 md:p-12">
         <form
-          onSubmit={HandleSubmit}
+          onSubmit={Handlesubmit}
           className="w-full max-w-md p-8 rounded-lg border shadow-sm"
         >
           <div className="flex justify-center mb-6">
@@ -23,8 +24,18 @@ const Login = () => {
           <div>
             <h2 className="text-2xl font-bold text-center mb-6">Hey there!</h2>
             <p className="text-center mb-6">
-              Enter your email and password to login
+              Enter your name email and password to signup
             </p>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold mb-2">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Enter your name"
+              />
+            </div>
             <div className="mb-4">
               <label className="block text-sm font-semibold mb-2">Email</label>
               <input
@@ -51,12 +62,12 @@ const Login = () => {
               type="submit"
               className="w-full bg-black p-2 rounded-lg font-semibold hover:bg-teal-800 text-white duration-300 cursor-pointer"
             >
-              Sign in{" "}
+              Sign Up{" "}
             </button>
             <p className="mt-6 text-center text-sm ">
-              Don't have an account?
-              <Link to={"/signup"} className="text-teal-500 font-bold">
-                Sign Up
+              already have an account?
+              <Link to={"/login"} className="text-teal-500 font-bold">
+                Login
               </Link>
             </p>
           </div>
@@ -65,7 +76,7 @@ const Login = () => {
       <div className="hidden md:block w-1/2 bg-gray-800">
         <div className="h-full flex flex-col justify-center items-center">
           <img
-            src="https://www.iconicindia.com/cdn/shop/articles/Winter_Outfit_Ideas.png?v=1693488909"
+            src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/901d5513904805.5627a2590ce00.jpg"
             alt="sign in image"
             className="h-[750px] w-full object-cover"
           />
@@ -75,4 +86,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
