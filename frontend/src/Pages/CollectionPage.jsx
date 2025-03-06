@@ -18,8 +18,10 @@ const CollectionPage = () => {
   };
   useEffect(() => {
     document.addEventListener("mousedown", handleclcikOutside);
-    document.removeEventListener("mousedown", handleclcikOutside);
-  });
+    return () => {
+      document.removeEventListener("mousedown", handleclcikOutside);
+    };
+  },[]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -117,8 +119,6 @@ const CollectionPage = () => {
     }, 1000);
   }, []);
 
- 
-
   return (
     <div className="flex flex-col lg:flex-row">
       {/* mobaile fiter button */}
@@ -140,8 +140,8 @@ const CollectionPage = () => {
       <div className="flex-grow p-4">
         <h2 className="text-2xl uppercase mb-4">All Collection</h2>
         {/* short options */}
-        <ShortOption/>
-        <ProductGrid products={products}/>
+        <ShortOption />
+        <ProductGrid products={products} />
       </div>
     </div>
   );
