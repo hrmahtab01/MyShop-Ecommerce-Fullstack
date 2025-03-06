@@ -3,9 +3,10 @@ import { IoMdClose } from "react-icons/io";
 import Cartcontents from "../Cart/Cartcontents";
 import { useNavigate } from "react-router";
 const CartDower = ({ cartdoweropen, Handlecartdowertoggole }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const HandleCheckout = () => {
-    navigate("/checkout")
+    Handlecartdowertoggole();
+    navigate("/checkout");
   };
   return (
     <div
