@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import AdminSidebar from "./AdminSidebar";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -16,6 +16,7 @@ const AdminLayout = () => {
         <button onClick={ToggoleSidebar}>
           <FaBars size={24} />
         </button>
+
         <h1 className="ml-4 text-xl font-medium">Admin Dashboard</h1>
       </div>
       {/* overley mobile sidebar */}
