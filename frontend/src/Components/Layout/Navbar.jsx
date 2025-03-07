@@ -27,20 +27,38 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden md:flex space-x-6">
-            <Link to={"/collections/all"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link
+              to={"/collections/all"}
+              className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
+            >
               Men
             </Link>
-            <Link to={"/collections/all"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link
+              to={"/collections/all"}
+              className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
+            >
               women
             </Link>
-            <Link to={"/collections/topwear"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link
+              to={"/collections/topwear"}
+              className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
+            >
               Top wear
             </Link>
-            <Link to={"/collections/bottomwear"} className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase">
+            <Link
+              to={"/collections/bottomwear"}
+              className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
+            >
               bottom wear
             </Link>
           </div>
           <div className="flex items-center space-x-4">
+            <Link
+              to={"/admin"}
+              className="block bg-black px-2 text-sm text-white rounded"
+            >
+              Admin
+            </Link>
             <Link to={"/profile"} className="">
               <FaUserCircle className="text-2xl text-gray-700 hover:text-teal-800 duration-300" />
             </Link>
@@ -104,7 +122,6 @@ const Navbar = () => {
             >
               Bottom wear
             </Link>
-            
           </nav>
         </div>
       </div>
