@@ -6,11 +6,18 @@ const cors = require("cors");
 const dbcconnect = require("./dbConfig/dbconnect");
 
 app.use(express.json());
+
 app.use(cors());
 dbcconnect();
 
 app.use(router);
 
-app.listen(4000, () => {
-  console.log("server is running on port 4000");
+app.use((req, res) => {
+  res.status(404).send("Page not found");
+});
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log(`server is running on port ${port}`);
 });

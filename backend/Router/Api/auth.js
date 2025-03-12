@@ -6,4 +6,4 @@ const router = express.Router();
 
 router.get("/signup", signupController);
 
-module.exports = router;
+module.exports = router; 
