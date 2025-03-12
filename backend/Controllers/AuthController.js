@@ -9,8 +9,9 @@ async function signupController(req, res) {
   const { name, email, password, role } = req.body;
 
   if (password.length < 6) {
-    return res.status(400).json({ message: "Password should be at least 6 characters long" });
-    
+    return res
+      .status(400)
+      .json({ message: "Password should be at least 6 characters long" });
   }
 
   if (!name || !email || !password) {
@@ -91,9 +92,10 @@ async function LoginController(req, res) {
     if (!isMatch) {
       return res
         .status(400)
-        .send({ success: false, message: "Invalid Credentials" });
+        .send({ success: false, message: "Invalid password" });
     }
 
+    // Token payload
     const tokenInfo = {
       id: existingUser._id,
       name: existingUser.name,
@@ -101,10 +103,27 @@ async function LoginController(req, res) {
       role: existingUser.role,
     };
 
-    let token = jwt.sign({ tokenInfo }, process.env.JWT_SECRET, {
-      expiresIn: existingUser.role === "admin" ? "1h" : "1d",
-    });
+    // Declare token variable
+    let token;
 
+    if (existingUser.role === "admin") {
+      token = jwt.sign({ tokenInfo }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+    } else if (existingUser.role === "customer") {
+      token = jwt.sign({ tokenInfo }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+    }
+
+    // Ensure token is set
+    if (!token) {
+      return res
+        .status(500)
+        .send({ success: false, message: "Token generation failed" });
+    }
+
+    // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
@@ -112,7 +131,7 @@ async function LoginController(req, res) {
 
     return res.status(200).send({
       success: true,
-      message: "Login successfully",
+      message: "Login successful",
       user: tokenInfo,
       token,
     });
@@ -121,4 +140,8 @@ async function LoginController(req, res) {
   }
 }
 
-module.exports = { signupController, LoginController };
+async function userprofileController(req, res) {
+  res.send(req.user);
+}
+
+module.exports = { signupController, LoginController, userprofileController };
