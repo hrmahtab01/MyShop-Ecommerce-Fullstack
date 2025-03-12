@@ -12,17 +12,26 @@ const UserSchema = mongoose.Schema(
       type: String,
       unique: true,
       trim: true,
+      match: [/.+\@.+\..+/, "Please fill a valid email address"],
     },
 
     password: {
       type: String,
       require: true,
-      min: 6,
+      minLeangth: 6,
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["customer", "admin"],
+      default: "customer",
+    },
+    otpverify: {
+      type: Boolean,
+      default: false,
+    },
+    otpvalue: {
+      type: Number,
+      default: null,
     },
   },
   {
