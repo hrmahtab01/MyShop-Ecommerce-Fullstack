@@ -3,7 +3,6 @@ const userModel = require("../Model/UserModel");
 const bcrypt = require("bcrypt");
 const otp = require("../Helpers/RandomOtpGenerator");
 const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
 
 async function signupController(req, res) {
   const { name, email, password, role } = req.body;
@@ -78,21 +77,16 @@ async function signupController(req, res) {
 async function LoginController(req, res) {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
   try {
     const existingUser = await userModel.findOne({ email });
+
     if (!existingUser) {
-      return res.status(400).send({ success: false, message: "Signup first" });
+      return res.status(401).send({ error: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, existingUser.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .send({ success: false, message: "Invalid password" });
+      return res.status(401).send({ error: "Invalid credentials" });
     }
 
     // Token payload
@@ -103,43 +97,24 @@ async function LoginController(req, res) {
       role: existingUser.role,
     };
 
-    // Declare token variable
-    let token;
+    const token = jwt.sign(tokenInfo, process.env.JWT_SECRET, {
+      expiresIn: existingUser.role === "admin" ? "20m" : "1d",
+    });
 
-    if (existingUser.role === "admin") {
-      token = jwt.sign({ tokenInfo }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-    } else if (existingUser.role === "customer") {
-      token = jwt.sign({ tokenInfo }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      });
-    }
-
-    // Ensure token is set
-    if (!token) {
-      return res
-        .status(500)
-        .send({ success: false, message: "Token generation failed" });
-    }
-
-    // Set cookie
-    res.cookie("token", token, {
+    res.cookie('token', token, {
       httpOnly: true,
       secure: true,
     });
 
     return res.status(200).send({
-      success: true,
       message: "Login successful",
       user: tokenInfo,
       token,
     });
   } catch (error) {
-    return res.status(500).send({ success: false, message: error.message });
+    return res.status(500).send({ message: error.message });
   }
 }
-
 async function userprofileController(req, res) {
   res.send(req.user);
 }
