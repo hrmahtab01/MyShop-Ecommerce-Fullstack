@@ -7,7 +7,7 @@ const GenderCollectionSection = () => {
       <div className="container mx-auto flex flex-col md:flex-row gap-8">
         <div className="flex-1 relative">
           <img
-            src="https://cdn.shopify.com/s/files/1/2570/6860/files/festival-outfits-2024-face-chain_600x600.jpg?v=1712933342"
+            src="https://i.pinimg.com/736x/14/ea/f7/14eaf7e4e0dea79470f5058852993dea.jpg"
             alt="women's collection"
             className="w-full h-[700px] object-cover"
           />
@@ -25,7 +25,7 @@ const GenderCollectionSection = () => {
         </div>
         <div className="flex-1 relative">
           <img
-            src="https://scontent.fdac140-1.fna.fbcdn.net/v/t39.30808-6/367488016_2015472572139494_7532209825833079501_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGKOFLkxlXYbplPCOozxCsRL6jNBIhD0aovqM0EiEPRqqf4LZM5XpFBxfxtP8jNUGxk_tNrE-VGhowVyc3OxTxx&_nc_ohc=HxMAgPL2Y1QQ7kNvgGSt_va&_nc_oc=AdjcA3Vj7PdjCkT7lXDeWvoWKhQDp53YSIvxMQOsH9f0mrFPjoNkLRlYeal2xklhOk0&_nc_zt=23&_nc_ht=scontent.fdac140-1.fna&_nc_gid=AOSJgiRycKy2kxfFVEPINEB&oh=00_AYBE026Sf9e9Xulc8yC3-qAhUKeeFfrOeZG9-Yom3TMAng&oe=67CBC46C"
+            src="https://scontent.fdac140-1.fna.fbcdn.net/v/t39.30808-6/405335606_2076286892724728_4014104283922080168_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEIsEu_eAj9Z0lzB5QxpI9ZFZ4Hl64NpQgVngeXrg2lCFzYl6e87j7d7bvsDuKEDZc9CaYlpC2hTvQJaeWh3TlS&_nc_ohc=qIYSp_4qbpkQ7kNvgFCIpiM&_nc_oc=AdiEJy5O9AT8s4WatmIadpXvUVoPzdSFL894ZaVZWVYwSixdGQk0kp6-gBlxiSCPu8o&_nc_zt=23&_nc_ht=scontent.fdac140-1.fna&_nc_gid=7c_vedJZkc7tCGzd4RbQKA&oh=00_AYFY_45hY_4PVfp-MGFlWy43lLLke576W72yQocFWTjUZA&oe=67DA2772"
             alt="Men's collection"
             className="w-full h-[700px] object-cover"
           />
