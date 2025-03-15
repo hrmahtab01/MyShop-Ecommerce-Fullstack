@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon Index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-   "seed":"node Seeder.js"
+    "seed": "node Seeder.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "mongoose": "^8.12.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "sslcommerz-lts": "^1.1.0"
   }
 }
