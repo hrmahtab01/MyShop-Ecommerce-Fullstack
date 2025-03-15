@@ -3,7 +3,7 @@ const productModel = require("../Model/productModel");
 
 const getCart = async (guestId, userId) => {
   if (userId) {
-    return await cartModel.findOne({ user: userId });
+    return await cartModel.findOne({ userId: userId });
   } else if (guestId) {
     return await cartModel.findOne({ guestId });
   }
@@ -100,7 +100,7 @@ async function incrementQuantityController(req, res) {
         p.size === size &&
         p.color === color
     );
-    if (productId > -1) {
+    if (productIndex > -1) {
       if (quantity > 0) {
         cart.products[productIndex].quantity = quantity;
       } else {
@@ -129,4 +129,132 @@ async function incrementQuantityController(req, res) {
   }
 }
 
-module.exports = { createCartController, incrementQuantityController };
+async function deleteCartController(req, res) {
+  const { productId, color, size, guestId, userId } = req.body;
+
+  try {
+    const cart = await getCart(guestId, userId);
+    if (!cart) {
+      return res.status(404).send({
+        success: false,
+        message: "cart not found",
+      });
+    }
+
+    const productIndex = cart.products.findIndex(
+      (p) =>
+        p.productId.toString() === productId &&
+        p.size === size &&
+        p.color === color
+    );
+    if (productIndex > -1) {
+      cart.products.splice(productIndex, 1);
+      cart.totalPrice = cart.products.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+      await cart.save();
+      return res.status(200).send({ success: true, data: cart });
+    } else {
+      return res.status(404).send({
+        success: false,
+        message: "product not found in cart",
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+
+async function getCartController(req, res) {
+  const { userId, guestId } = req.query;
+  try {
+    const cart = await getCart(guestId, userId);
+    if (cart) {
+      return res.status(200).send({
+        success: true,
+        data: cart,
+      });
+    } else {
+      return res.status(404).send({
+        success: false,
+        message: "cart not found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+
+async function cartmargeController(req, res) {
+  const { guestId } = req.body;
+
+  try {
+    const guestCart = await cartModel.findOne({ guestId });
+    const usercart = await cartModel.findOne({ userId: req.user._id });
+    if (guestCart) {
+      if (guestCart.products.length === 0) {
+        return res
+          .status(400)
+          .send({ success: false, message: "guest cart is empty" });
+      }
+      if (usercart) {
+        guestCart.products.forEach((guestItem) => {
+          const productIndex = usercart.products.findIndex(
+            (item) =>
+              item.productId.toString() === guestItem.productId.toString() &&
+              item.size === guestItem.size &&
+              item.color === guestItem.color
+          );
+          if (productIndex > -1) {
+            usercart.products[productIndex].quantity += guestItem.quantity;
+          } else {
+            usercart.products.push(guestItem);
+          }
+        });
+        usercart.totalPrice = usercart.products.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
+        await usercart.save();
+        try {
+          await cartModel.findOneAndDelete({ guestId });
+        } catch (error) {
+          console.error("error deleting guest cart", error);
+        }
+        return res.status(200).send({ success: true, data: usercart });
+      } else {
+        guestCart.useId = req.user._id;
+        guestCart.guestId = undefined;
+        await guestCart.save();
+        return res.status(200).send({ success: true, data: guestCart });
+      }
+    }else{
+      if (usercart) {
+        return res.status(200).send({ success: true, data: usercart });
+      }
+      return res.status(404).send({
+        success: false,
+        message: "guestcart not found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+module.exports = {
+  createCartController,
+  incrementQuantityController,
+  deleteCartController,
+  getCartController,
+  cartmargeController,
+};
