@@ -9,7 +9,7 @@ const orderItemSchema = mongoose.Schema(
     },
     name: {
       type: String,
-      required: tru,
+      required: true,
     },
     image: {
       type: String,
@@ -19,11 +19,10 @@ const orderItemSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    size: String,
-    color: String,
     quantity: {
       type: Number,
       required: true,
+      default: 1,
     },
   },
   {
@@ -33,12 +32,12 @@ const orderItemSchema = mongoose.Schema(
 
 const orderSchema = mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    orderItem: [orderItemSchema],
+    ordertItems: [orderItemSchema],
     shippingAddress: {
       address: {
         type: String,
@@ -59,7 +58,7 @@ const orderSchema = mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["COD", "Online"],
+      enum: ["COD", "online"],
     },
     totalPrice: {
       type: Number,
@@ -72,24 +71,26 @@ const orderSchema = mongoose.Schema(
     paidAt: {
       type: Date,
     },
-    isDelivered: {
-      type: Boolean,
-      default: false,
-    },
-    delivaredAt: {
-      type: Date(),
-    },
     paymentStatus: {
       type: String,
       enum: ["paid", "unpaid"],
       default: "unpaid",
     },
-    status: {
+    paymentDetails: {
+      type: mongoose.Schema.Types.Mixed,
+    },
+    isFinalized: {
+      type: Boolean,
+      default: false,
+    },
+    finalizedAt: {
+      type: Date,
+    },
+    transId: {
       type: String,
-      enum: ["Proccesing", "Shipped", "Delivered", "Cancelled"],
-      default: "Proccesing",
     },
   },
+
   {
     timestamps: true,
   }

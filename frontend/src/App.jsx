@@ -18,6 +18,9 @@ import UserManagement from "./Components/Admin/UserManagement";
 import ProductManagement from "./Components/Admin/ProductManagement";
 import EditProductPage from "./Components/Admin/EditProductPage";
 import OrderManagement from "./Components/Admin/OrderManagement";
+import Success from "./Components/Common/Success";
+import Paymentfail from "./Components/Common/paymentfail";
+import Cancel from "./Components/Common/Cancel";
 
 const App = () => {
   return (
@@ -36,6 +39,9 @@ const App = () => {
           <Route path="/confirmorder" element={<OrderConfirmPage />} />
           <Route path="/order/:id" element={<OrderDetailspage />} />
           <Route path="my-orders" element={<MyOrderspage />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/fail" element={<Paymentfail />} />
+          <Route path="/cancel" element={<Cancel />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           {/* <admin layout /> */}
