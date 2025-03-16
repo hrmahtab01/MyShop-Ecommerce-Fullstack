@@ -1,26 +1,31 @@
 const CheckoutModel = require("../Model/Checkout");
 const SSLCommerzPayment = require("sslcommerz-lts");
-const store_id = process.env.STORE_ID;
-const store_passwd = process.env.STORE_PASS;
+const store_id = "laraz67b794826e5c6";
+const store_passwd = "laraz67b794826e5c6@ssl";
 const is_live = false;
 
 async function CheckoutCreateController(req, res) {
-  const { checkoutItems, shippingAddress, paymentMethod, totalPrice } =
-    req.body;
-  if (!checkoutItems || checkoutItems.length === 0) {
-    res.status(400).send({ success: false, message: "no items in checkout" });
-  }
+  const {
+    checkoutItems,
+    shippingAddress,
+    paymentMethod,
+    totalPrice,
+    paymentStatus,
+    transId,
+    userId,
+  } = req.body;
+
   try {
     if (paymentMethod === "COD") {
       const newCheckout = await CheckoutModel.create({
-        user: req.user._id,
+        userId,
         checkoutItems: checkoutItems,
         shippingAddress,
-        paymentMethod,
+        paymentMethod: "COD",
         totalPrice,
         paymentStatus: "unpaid",
       });
-      console.log(`checkout created for user ${req.user._id}`);
+
       return res.status(201).send({
         success: true,
         message: "checkout created successfully",
@@ -29,25 +34,25 @@ async function CheckoutCreateController(req, res) {
     } else {
       const transid = Date.now();
       const data = {
-        total_amount: 100,
+        total_amount: totalPrice,
         currency: "BDT",
-        tran_id: transid, // use unique tran_id for each api call
-        success_url: "http://localhost:3030/success",
-        fail_url: "http://localhost:3030/fail",
-        cancel_url: "http://localhost:3030/cancel",
-        ipn_url: "http://localhost:3030/ipn",
+        tran_id: transid,
+        success_url: `http://localhost:4400/api/v1/checkout/success/${transid}`,
+        fail_url: `http://localhost:4400/api/v1/checkout/fail${transid}`,
+        cancel_url: `http://localhost:4400/api/v1/checkout/cancel${transid}`,
+        ipn_url: `http://localhost:4400/api/v1/checkout/ipn${transid}`,
         shipping_method: "Courier",
         product_name: "Computer.",
         product_category: "Electronic",
         product_profile: "general",
         cus_name: "Customer Name",
         cus_email: "customer@example.com",
-        cus_add1: "Dhaka",
+        cus_add1: shippingAddress.address,
         cus_add2: "Dhaka",
-        cus_city: "Dhaka",
+        cus_city: shippingAddress.city,
         cus_state: "Dhaka",
-        cus_postcode: "1000",
-        cus_country: "Bangladesh",
+        cus_postcode: shippingAddress.postalCode,
+        cus_country: shippingAddress.country,
         cus_phone: "01711111111",
         cus_fax: "01711111111",
         ship_name: "Customer Name",
@@ -58,12 +63,21 @@ async function CheckoutCreateController(req, res) {
         ship_postcode: 1000,
         ship_country: "Bangladesh",
       };
+      console.log(data);
+
       const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
-      sslcz.init(data).then((apiResponse) => {
-        // Redirect the user to payment gateway
+      sslcz.init(data).then(async (apiResponse) => {
+        const newCheckout = new CheckoutModel({
+          userId,
+          checkoutItems: checkoutItems,
+          shippingAddress,
+          paymentMethod: "online",
+          totalPrice,
+          transId: transid,
+        });
+        await newCheckout.save();
         let GatewayPageURL = apiResponse.GatewayPageURL;
-        res.redirect(GatewayPageURL);
-        console.log("Redirecting to: ", GatewayPageURL);
+        res.send(GatewayPageURL);
       });
     }
   } catch (error) {

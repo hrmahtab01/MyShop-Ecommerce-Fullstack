@@ -53,7 +53,7 @@ const checkoutSchema = mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["COD", "Online"],
+      enum: ["COD", "online"],
     },
     totalPrice: {
       type: Number,
@@ -81,7 +81,11 @@ const checkoutSchema = mongoose.Schema(
     finalizedAt: {
       type: Date,
     },
+    transId: {
+      type: String,
+    },
   },
+
   {
     timestamps: true,
   }
