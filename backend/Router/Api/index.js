@@ -7,6 +7,8 @@ const order = require("./order");
 const uploadrouter = require("./uploadRoute");
 const subscriberRoute = require("./SubscriberRoute");
 const adminRoute = require("./adminRoute");
+const adminorderRoute = require("./adminOrderRoute");
+
 
 // http://localhost:4400/api/v1/auth
 router.use("/auth", auth);
@@ -20,7 +22,10 @@ router.use("/order", order);
 router.use("/upload", uploadrouter);
 // http://localhost:4400/api/v1/subscriber
 router.use("/subscribe", subscriberRoute);
-// http://localhost:4400/api/v1/subscriber
+// http://localhost:4400/api/v1/admin
 router.use("/admin", adminRoute);
+router.use("/admin" ,adminorderRoute )
+
+
 
 module.exports = router;

@@ -89,6 +89,19 @@ const orderSchema = mongoose.Schema(
     transId: {
       type: String,
     },
+    status: {
+      type: String,
+      enum: ["processing", "shiped", "delivered", "cancelled"],
+      default: "processing",
+    },
+    isdelivered: {
+      type: Boolean,
+      default: false,
+    },
+    deliveredAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
 
   {

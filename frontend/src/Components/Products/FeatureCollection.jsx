@@ -26,7 +26,7 @@ const FeatureCollection = () => {
         </div>
         <div className="lg:w-1/2 ">
           <img
-            src="https://www.lovedbylizzi.com/wp-content/uploads/2022/05/SPRING-OUTFIT-BREAKDOWN-Woman-and-Home.jpg"
+            src="https://www.shutterstock.com/image-photo/mystery-arabic-woman-black-long-600nw-2124196751.jpg"
             alt="featured product"
             className="w-full h-full object-cover lg:rounded-tr-3xl lg:rounded-br-3xl"
           />
