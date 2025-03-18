@@ -1,4 +1,3 @@
-
 const SSLCommerzPayment = require("sslcommerz-lts");
 const orderModel = require("../Model/Order");
 const store_id = "laraz67b794826e5c6";
@@ -20,7 +19,7 @@ async function orderCreateController(req, res) {
     if (paymentMethod === "COD") {
       const neworder = await orderModel.create({
         userId,
-        ordertItems:  ordertItems,
+        ordertItems: ordertItems,
         shippingAddress,
         paymentMethod: "COD",
         totalPrice,
@@ -92,16 +91,18 @@ async function orderCreateController(req, res) {
 async function paymentSuccessController(req, res) {
   const { id } = req.params;
   try {
-    const findid = await orderModel.findOneAndUpdate(
-      { transId: id },
-      {
-        paymentStatus: "paid",
-        isPaid: true,
-      },
-      { new: true }
-    ).then(() => {
-     return res.redirect("http://localhost:5173/success");
-    });
+    const findid = await orderModel
+      .findOneAndUpdate(
+        { transId: id },
+        {
+          paymentStatus: "paid",
+          isPaid: true,
+        },
+        { new: true }
+      )
+      .then(() => {
+        return res.redirect("http://localhost:5173/success");
+      });
   } catch (error) {
     return res.status(500).send({ success: false, message: error.message });
   }
@@ -109,27 +110,30 @@ async function paymentSuccessController(req, res) {
 
 async function PaymentfailController(req, res) {
   const { id } = req.params;
-  const deleteorder = await orderModel.findOneAndDelete({
-    trans_id: id,
-  }).then(() => {
-   return res.redirect("http://localhost:5173/fail");
-  });
+  const deleteorder = await orderModel
+    .findOneAndDelete({
+      trans_id: id,
+    })
+    .then(() => {
+      return res.redirect("http://localhost:5173/fail");
+    });
 }
 
 async function PaymentCencelController(req, res) {
   const { id } = req.params;
 
-  const deleteorder = await orderModel.findOneAndDelete({
-    trans_id: id,
-  }).then(() => {
-   return res.redirect("http://localhost:5173/cancel");
-  });
+  const deleteorder = await orderModel
+    .findOneAndDelete({
+      trans_id: id,
+    })
+    .then(() => {
+      return res.redirect("http://localhost:5173/cancel");
+    });
 }
 
 async function getAllorderController(req, res) {
-  
   try {
-    const allorder = await orderModel.find({})
+    const allorder = await orderModel.find({});
     return res.status(200).send({
       success: true,
       message: "all order get successfully",
@@ -146,7 +150,7 @@ async function getAllorderController(req, res) {
 async function getsingleOrderController(req, res) {
   const { id } = req.params;
   try {
-    const singleorder = await orderModel.findOne({ _id: id })
+    const singleorder = await orderModel.findOne({ _id: id });
     if (!singleorder) {
       return res.status(404).send({
         success: false,
