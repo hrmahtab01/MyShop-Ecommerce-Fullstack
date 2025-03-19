@@ -1,14 +1,41 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Toaster, toast } from "sonner";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const Handlesubmit = (e) => {
     e.preventDefault();
-    console.log("user signup", name, email, password);
+    setLoading(true);
+
+    axios
+      .post("http://localhost:4400/api/v1/auth/signup", {
+        name,
+        email,
+        password,
+      })
+      .then((respone) => {
+        toast.success( respone.data?.message || "Signup successfully");
+
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/login");
+        }, 500);
+      })
+      .catch((error) => {
+        toast.error(error.response.data?.message || "something went wrong");
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+
+        console.log(error);
+      });
   };
 
   return (
@@ -62,7 +89,7 @@ const Signup = () => {
               type="submit"
               className="w-full bg-black p-2 rounded-lg font-semibold hover:bg-teal-800 text-white duration-300 cursor-pointer"
             >
-              Sign Up{" "}
+              {loading ? "loading..." : " Sign Up "}
             </button>
             <p className="mt-6 text-center text-sm ">
               already have an account?

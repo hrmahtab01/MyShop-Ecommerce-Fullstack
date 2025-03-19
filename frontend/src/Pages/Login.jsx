@@ -1,13 +1,33 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Toaster, toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const HandleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
-    console.log("user login", email, password);
+    axios
+      .post("http://localhost:4400/api/v1/auth/login", { email, password })
+      .then((response) => {
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        toast.success(response.data.message || "Login successfully");
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/");
+        }, 500);
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message || "something went wrong");
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+      });
   };
 
   return (
@@ -51,7 +71,7 @@ const Login = () => {
               type="submit"
               className="w-full bg-black p-2 rounded-lg font-semibold hover:bg-teal-800 text-white duration-300 cursor-pointer"
             >
-              Sign in{" "}
+              {loading ? "Loading..." : " Sign in"}
             </button>
             <p className="mt-6 text-center text-sm ">
               Don't have an account?
