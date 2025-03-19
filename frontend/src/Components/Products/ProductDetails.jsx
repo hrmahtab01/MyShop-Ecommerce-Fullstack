@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ProductGrid from "./ProductGrid";
+import axios from "axios";
 
 const ProductDetails = () => {
   const [mainimage, setMainimage] = useState(0);
@@ -8,6 +9,7 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isButtonDisable, setIsButtonDisable] = useState(false);
+  const [bestseller, setBestseller] = useState([]);
 
   const SelectProduct = {
     name: "Stylish jacket",
@@ -29,9 +31,27 @@ const ProductDetails = () => {
       },
     ],
   };
+
   useEffect(() => {
-    if (SelectProduct?.images?.length > 0) {
-      setMainimage(SelectProduct.images[0].url);
+    const fetchBestsellers = () => {
+      axios
+        .get("http://localhost:4400/api/v1/product/best-seller")
+        .then((result) => {
+          setBestseller(result.data.data);
+          
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchBestsellers();
+  }, []);
+  console.log(bestseller);
+  
+
+  useEffect(() => {
+    if (bestseller?.images?.length > 0) {
+      setMainimage(bestseller.images[0].url);
     }
   }, [setMainimage]);
 
@@ -107,7 +127,7 @@ const ProductDetails = () => {
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
         <div className="flex flex-col md:flex-row">
           <div className="hidden md:flex flex-col space-y-4 mr-6">
-            {SelectProduct.images.map((img, index) => (
+            {mainimage.images.map((img, index) => (
               <img
                 key={index}
                 src={img.url}
@@ -129,7 +149,7 @@ const ProductDetails = () => {
             </div>
           </div>
           <div className="md:hidden flex overscroll-x-auto space-x-4 mb-4">
-            {SelectProduct.images.map((img, index) => (
+            {/* {bestseller.images.map((img, index) => (
               <img
                 key={index}
                 src={img.url}
@@ -139,23 +159,23 @@ const ProductDetails = () => {
                 }`}
                 onClick={() => setMainimage(img.url)}
               />
-            ))}
+            ))} */}
           </div>
           <div className="md:1/2 md:ml-10">
             <h1 className="text-2xl md:text-3xl font-semibold mb-2">
-              {SelectProduct.name}
+              {bestseller.name}
             </h1>
             <p className="text-lg text-gray-600 mb-1 line-through">
-              {SelectProduct.originalprice}
+              {bestseller.originalprice}
             </p>
             <p className="text-xl text-gray-500 mb-2">
-              {SelectProduct.price} Taka
+              {bestseller.price} Taka
             </p>
-            <p className="text-gray-600 mb-4">{SelectProduct.description}</p>
+            <p className="text-gray-600 mb-4">{bestseller.description}</p>
             <div className="mb-4">
               <p className="text-gray-700">Color:</p>
               <div className="flex gap-2 mt-2">
-                {SelectProduct.colors.map((color) => (
+                {bestseller.colors.map((color) => (
                   <button
                     onClick={() => setSelectedColor(color)}
                     key={color}

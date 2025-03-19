@@ -15,7 +15,7 @@ const Login = () => {
     axios
       .post("http://localhost:4400/api/v1/auth/login", { email, password })
       .then((response) => {
-        localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("token", JSON.stringify(response.data));
         toast.success(response.data.message || "Login successfully");
         setTimeout(() => {
           setLoading(false);

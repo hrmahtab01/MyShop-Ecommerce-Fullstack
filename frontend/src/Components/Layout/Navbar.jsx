@@ -6,10 +6,12 @@ import { HiBars3 } from "react-icons/hi2";
 import Searchbar from "../Common/Searchbar";
 import CartDower from "./CartDower";
 import { IoMdClose } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [cartdoweropen, setCartdoweropen] = useState(false);
   const [navdroweropen, setNavdroweropen] = useState(false);
+  const data = useSelector((state) => state.userData.value);
 
   const Handlecartdowertoggole = () => {
     setCartdoweropen(!cartdoweropen);
@@ -52,16 +54,27 @@ const Navbar = () => {
               bottom wear
             </Link>
           </div>
+
           <div className="flex items-center space-x-4">
-            <Link
-              to={"/admin"}
-              className="block bg-black px-2 text-sm text-white rounded"
-            >
-              Admin
-            </Link>
+            {data?.user?.role === "admin" && (
+              <Link
+                to={"/admin"}
+                className="block bg-black px-2 text-sm text-white rounded"
+              >
+                Admin
+              </Link>
+            )}
+            {data?.token ?(
+
             <Link to={"/profile"} className="">
               <FaUserCircle className="text-2xl text-gray-700 hover:text-teal-800 duration-300" />
             </Link>
+            ):(
+              <Link to={"/login"} className="">
+              <h3 className="text-xl text-gray-700 font-bold hover:text-teal-800 duration-300" >Login</h3>
+            </Link>
+            
+            ) }
             <button onClick={Handlecartdowertoggole} className="relative  ">
               <FaShoppingBag className="text-2xl text-gray-700 hover:text-teal-800 duration-300 cursor-pointer" />
               <span className="absolute -top-1 text-xs text-white bg-PrimaryRed rounded-full px-2 py-0.5 ">
