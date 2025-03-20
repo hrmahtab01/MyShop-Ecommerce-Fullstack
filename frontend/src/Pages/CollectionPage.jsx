@@ -3,11 +3,40 @@ import { FaFilter } from "react-icons/fa";
 import FilterSidebar from "../Components/Products/FilterSidebar";
 import ShortOption from "../Components/Products/ShortOption";
 import ProductGrid from "../Components/Products/ProductGrid";
+import axios from "axios";
 
 const CollectionPage = () => {
   const [products, setProducts] = useState([]);
   const sidebarRef = useRef();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [params, setParams] = useState({
+    collection: "",
+    size: "",
+    color: "",
+    gender: "",
+    minPrice: "",
+    maxPrice: "",
+    sortBy: "",
+    search: "",
+    category: "",
+    brand: "",
+    limit: "",
+    material: "",
+  });
+
+  const quary = new URLSearchParams();
+  if (params.collection) quary.append("collection", params.collection);
+  if (params.size) quary.append("size", params.size);
+  if (params.color) quary.append("color", params.color);
+  if (params.gender) quary.append("gender", params.gender);
+  if (params.minPrice) quary.append("minPrice", params.minPrice);
+  if (params.maxPrice) quary.append("maxPrice", params.maxPrice);
+  if (params.sortBy) quary.append("sortBy", params.sortBy);
+  if (params.search) quary.append("search", params.search);
+  if (params.category) quary.append("category", params.category);
+  if (params.brand) quary.append("brand", params.brand);
+  if (params.limit) quary.append("limit", params.limit);
+  if (params.material) quary.append("material", params.material);
   const toggolesidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -21,103 +50,23 @@ const CollectionPage = () => {
     return () => {
       document.removeEventListener("mousedown", handleclcikOutside);
     };
-  },[]);
+  }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      const fetchdata = [
-        {
-          _id: 1,
-          name: "product 1 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/free-photo-fashion-portrait-young-beautiful-confident-lady-wearing-trendy-winter-outfits_1124573-77227.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 1",
-            },
-          ],
-        },
-        {
-          _id: 2,
-          name: "product 2 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/free-photo-fashion-portrait-young-beautiful-confident-lady-wearing-trendy-winter-outfits_1124573-77227.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 2",
-            },
-          ],
-        },
-        {
-          _id: 3,
-          name: "product 3 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/free-photo-fashion-portrait-young-beautiful-confident-lady-wearing-trendy-winter-outfits_1124573-77227.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 3",
-            },
-          ],
-        },
-        {
-          _id: 4,
-          name: "product 4 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/free-photo-fashion-portrait-young-beautiful-confident-lady-wearing-trendy-winter-outfits_1124573-77227.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 4",
-            },
-          ],
-        },
-        {
-          _id: 5,
-          name: "product 5 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/pretty-blonde-girl-with-freckles-yellow-outfit-straw-hat-yellow_165383-71.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 5",
-            },
-          ],
-        },
-        {
-          _id: 6,
-          name: "product 7 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/pretty-blonde-girl-with-freckles-yellow-outfit-straw-hat-yellow_165383-71.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 6",
-            },
-          ],
-        },
-        {
-          _id: 7,
-          name: "product 7 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/pretty-blonde-girl-with-freckles-yellow-outfit-straw-hat-yellow_165383-71.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 7",
-            },
-          ],
-        },
-        {
-          _id: 8,
-          name: "product 8 ",
-          price: 125,
-          images: [
-            {
-              url: "https://img.freepik.com/premium-photo/pretty-blonde-girl-with-freckles-yellow-outfit-straw-hat-yellow_165383-71.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-              alTtext: "product 8",
-            },
-          ],
-        },
-      ];
-      setProducts(fetchdata);
-    }, 1000);
-  }, []);
+    const fetchdatAllProduct = () => {
+      axios
+        .get(
+          `http://localhost:4400/api/v1/product/allproduct?${quary.toString()}`
+        )
+        .then((result) => {
+          setProducts(result.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchdatAllProduct();
+  }, [quary]);
 
   return (
     <div className="flex flex-col lg:flex-row">

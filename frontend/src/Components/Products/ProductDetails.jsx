@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 import ProductGrid from "./ProductGrid";
 import axios from "axios";
+import { useLocation, useParams } from "react-router";
 
 const ProductDetails = () => {
   const [mainimage, setMainimage] = useState(0);
@@ -9,28 +10,11 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isButtonDisable, setIsButtonDisable] = useState(false);
-  const [bestseller, setBestseller] = useState([]);
-
-  const SelectProduct = {
-    name: "Stylish jacket",
-    price: 1560,
-    originalprice: 5200,
-    description: "this in a stylish jacket perfect for any occesion",
-    brand: "fashionBrand",
-    material: "leather",
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Red", "Black", "Blue"],
-    images: [
-      {
-        url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-        alTtext: "jacket 1",
-      },
-      {
-        url: "https://img.freepik.com/free-photo/stylish-woman-red-denim-jacket-apparel-shoot-rear-view_53876-102122.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-        alTtext: "jacket 2",
-      },
-    ],
-  };
+  const [bestseller, setBestseller] = useState({});
+  const [allImages, setAllImages] = useState([]);
+  const [similarProducts, setSimilarProducts] = useState([]);
+  const location = useLocation();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchBestsellers = () => {
@@ -38,7 +22,7 @@ const ProductDetails = () => {
         .get("http://localhost:4400/api/v1/product/best-seller")
         .then((result) => {
           setBestseller(result.data.data);
-          
+          setAllImages(result.data.data.images);
         })
         .catch((error) => {
           console.log(error);
@@ -46,14 +30,10 @@ const ProductDetails = () => {
     };
     fetchBestsellers();
   }, []);
-  console.log(bestseller);
-  
-
+  console.log(similarProducts);
   useEffect(() => {
-    if (bestseller?.images?.length > 0) {
-      setMainimage(bestseller.images[0].url);
-    }
-  }, [setMainimage]);
+    setMainimage(allImages[0]?.url);
+  }, [allImages]);
 
   const handlesetQuantity = (action) => {
     if (action === "minus" && quantity > 1) setQuantity((prev) => prev - 1);
@@ -75,195 +55,325 @@ const ProductDetails = () => {
     }, 500);
   };
 
-  const similarProducts = [
-    {
-      _id: 1,
-      name: "product 1 ",
-      price: 125,
-      images: [
-        {
-          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-          alTtext: "product 1",
-        },
-      ],
-    },
-    {
-      _id: 2,
-      name: "product 2 ",
-      price: 125,
-      images: [
-        {
-          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-          alTtext: "product 2",
-        },
-      ],
-    },
-    {
-      _id: 3,
-      name: "product 3 ",
-      price: 125,
-      images: [
-        {
-          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-          alTtext: "product 3",
-        },
-      ],
-    },
-    {
-      _id: 4,
-      name: "product 4 ",
-      price: 125,
-      images: [
-        {
-          url: "https://img.freepik.com/free-photo/high-angle-boy-with-headphones_23-2148478673.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-          alTtext: "product 1",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchsimilarProducts = () => {
+      axios
+        .get(`http://localhost:4400/api/v1/product/similar/${bestseller._id}`)
+        .then((result) => {
+          setSimilarProducts(result.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchsimilarProducts();
+  }, [bestseller._id]);
+
+  useEffect(() => {
+    const fetchsingleProduct = () => {
+      axios
+        .get(`http://localhost:4400/api/v1/product/singleproduct/${id}`)
+        .then((result) => {
+          setBestseller(result.data.data);
+          setAllImages(result.data.data.images);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchsingleProduct();
+  },[id]);
 
   return (
-    <div className="p-6">
-      <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
-        <div className="flex flex-col md:flex-row">
-          <div className="hidden md:flex flex-col space-y-4 mr-6">
-            {mainimage.images.map((img, index) => (
-              <img
-                key={index}
-                src={img.url}
-                alt={img.alTtext || `thumnail${index}`}
-                className={`w-20 h-20 object-cover rounded-b-lg cursor-pointer border ${
-                  mainimage === img.url ? "border-black" : "border-gray-400"
-                }`}
-                onClick={() => setMainimage(img.url)}
-              />
-            ))}
-          </div>
-          <div className="md:w-1/2">
-            <div className="mb-4">
-              <img
-                src={mainimage}
-                alt="main product"
-                className="w-full h-auto object-cover rounded-lg"
-              />
-            </div>
-          </div>
-          <div className="md:hidden flex overscroll-x-auto space-x-4 mb-4">
-            {/* {bestseller.images.map((img, index) => (
-              <img
-                key={index}
-                src={img.url}
-                alt={img.alTtext || `thumnail${index}`}
-                className={`w-20 h-20 object-cover rounded-b-lg cursor-pointer border ${
-                  mainimage === img.url ? "border-black" : "border-gray-400"
-                }`}
-                onClick={() => setMainimage(img.url)}
-              />
-            ))} */}
-          </div>
-          <div className="md:1/2 md:ml-10">
-            <h1 className="text-2xl md:text-3xl font-semibold mb-2">
-              {bestseller.name}
-            </h1>
-            <p className="text-lg text-gray-600 mb-1 line-through">
-              {bestseller.originalprice}
-            </p>
-            <p className="text-xl text-gray-500 mb-2">
-              {bestseller.price} Taka
-            </p>
-            <p className="text-gray-600 mb-4">{bestseller.description}</p>
-            <div className="mb-4">
-              <p className="text-gray-700">Color:</p>
-              <div className="flex gap-2 mt-2">
-                {bestseller.colors.map((color) => (
-                  <button
-                    onClick={() => setSelectedColor(color)}
-                    key={color}
-                    className={`w-8 h-8 rounded-full border cursor-pointer ${
-                      selectedColor === color
-                        ? "border-4 border-black"
-                        : "border-gray-300"
+    <>
+      {location.pathname === "/" ? (
+        <div className="p-6">
+          <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
+            <div className="flex flex-col md:flex-row">
+              <div className="hidden md:flex flex-col space-y-4 mr-6">
+                {allImages.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img.url}
+                    alt={img.alTtext || `thumnail${index}`}
+                    className={`w-20 h-20 object-cover rounded-b-lg cursor-pointer border ${
+                      mainimage === img.url ? "border-black" : "border-gray-400"
                     }`}
-                    style={{
-                      backgroundColor: color.toLocaleLowerCase(),
-                      filter: "brightness(2.5)",
-                    }}
-                  ></button>
+                    onClick={() => setMainimage(img.url)}
+                  />
                 ))}
               </div>
-            </div>
-            <div className="mb-4">
-              <p className="text-gray-700">Size:</p>
-              <div className="flex gap-2 mt-2">
-                {SelectProduct.sizes.map((size) => (
-                  <button
-                    onClick={() => setSelectedsize(size)}
-                    key={size}
-                    className={`px-4 py-2 rounded border cursor-pointer ${
-                      selectedSize === size
-                        ? "bg-black text-white"
-                        : "border-gray-300"
+              <div className="md:w-1/2">
+                <div className="mb-4">
+                  <img
+                    src={mainimage}
+                    alt="main product"
+                    className="w-full h-auto object-cover rounded-lg"
+                  />
+                </div>
+              </div>
+              <div className="md:hidden flex overscroll-x-auto space-x-4 mb-4">
+                {allImages.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img.url}
+                    alt={img.alTtext || `thumnail${index}`}
+                    className={`w-20 h-20 object-cover rounded-b-lg cursor-pointer border ${
+                      mainimage === img.url ? "border-black" : "border-gray-400"
                     }`}
-                  >
-                    {size}
-                  </button>
+                    onClick={() => setMainimage(img.url)}
+                  />
                 ))}
               </div>
-            </div>
-            <div className="mb-6">
-              <p className="text-gray-700">Quantity</p>
-              <div className="flex items-center space-x-4 mt-2">
+              <div className="md:1/2 md:ml-10">
+                <h1 className="text-2xl md:text-3xl font-semibold mb-2">
+                  {bestseller.name}
+                </h1>
+                <p className="text-lg text-gray-600 mb-1 line-through">
+                  {bestseller.originalprice}
+                </p>
+                <p className="text-xl text-gray-500 mb-2">
+                  {bestseller.price} Taka
+                </p>
+                <p className="text-gray-600 mb-4">{bestseller.description}</p>
+                <div className="mb-4">
+                  <p className="text-gray-700">Color:</p>
+                  <div className="flex gap-2 mt-2">
+                    {bestseller.colors?.map((color, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedColor(color)}
+                        className={`${
+                          selectedColor === color
+                            ? "bg-black text-white"
+                            : "bg-gray-200 text-gray-700"
+                        } px-4 py-2 rounded`}
+                      >
+                        {color}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <p className="text-gray-700">Size:</p>
+                  <div className="flex gap-2 mt-2">
+                    {bestseller.sizes?.map((size, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedsize(size)}
+                        className={`${
+                          selectedSize === size
+                            ? "bg-black text-white"
+                            : "bg-gray-200 text-gray-700"
+                        } px-4 py-2 rounded`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <p className="text-gray-700">Quantity</p>
+                  <div className="flex items-center space-x-4 mt-2">
+                    <button
+                      onClick={() => handlesetQuantity("minus")}
+                      className="px-2 py-1 bg-gray-200 rounded text-lg"
+                    >
+                      -
+                    </button>
+                    <span className="text-lg">{quantity}</span>
+                    <button
+                      onClick={() => handlesetQuantity("plus")}
+                      className="px-2 py-1 bg-gray-200 rounded text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
                 <button
-                  onClick={() => handlesetQuantity("minus")}
-                  className="px-2 py-1 bg-gray-200 rounded text-lg"
+                  onClick={HandleAddtoCart}
+                  disabled={isButtonDisable}
+                  className={`bg-black text-white py-2 px-6 rounded w-full mb-4 cursor-pointer  duration-300 uppercase ${
+                    isButtonDisable
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover:bg-teal-600"
+                  }`}
                 >
-                  -
+                  {isButtonDisable ? "adding..." : "Add to cart"}
                 </button>
-                <span className="text-lg">{quantity}</span>
-                <button
-                  onClick={() => handlesetQuantity("plus")}
-                  className="px-2 py-1 bg-gray-200 rounded text-lg"
-                >
-                  +
-                </button>
+                <div className="mt-10 text-gray-700">
+                  <h3 className="text-xl font-bold mb-4">Characteristics</h3>
+                  <table className="w-full text-left text-sm text-gray-600">
+                    <tbody>
+                      <tr>
+                        <td className="py-1">Brand</td>
+                        <td className="py-1">{bestseller.brand}</td>
+                      </tr>
+                      <tr>
+                        <td className="py-1">Material</td>
+                        <td className="py-1">{bestseller.material}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-            <button
-              onClick={HandleAddtoCart}
-              disabled={isButtonDisable}
-              className={`bg-black text-white py-2 px-6 rounded w-full mb-4 cursor-pointer  duration-300 uppercase ${
-                isButtonDisable
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:bg-teal-600"
-              }`}
-            >
-              {isButtonDisable ? "adding..." : "Add to cart"}
-            </button>
-            <div className="mt-10 text-gray-700">
-              <h3 className="text-xl font-bold mb-4">Characteristics</h3>
-              <table className="w-full text-left text-sm text-gray-600">
-                <tbody>
-                  <tr>
-                    <td className="py-1">Brand</td>
-                    <td className="py-1">{SelectProduct.brand}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-1">Material</td>
-                    <td className="py-1">{SelectProduct.material}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="mt-20">
+              <h2 className="text-2xl text-center font-medium mb-4">
+                You May Also Like
+              </h2>
+              <ProductGrid
+                products={similarProducts}
+                productid={bestseller._id}
+              />
             </div>
           </div>
         </div>
-        <div className="mt-20">
-          <h2 className="text-2xl text-center font-medium mb-4">
-            You May Also Like
-          </h2>
-          <ProductGrid products={similarProducts} />
+      ) : (
+        <div className="p-6">
+          <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
+            <div className="flex flex-col md:flex-row">
+              <div className="hidden md:flex flex-col space-y-4 mr-6">
+                {allImages.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img.url}
+                    alt={img.alTtext || `thumnail${index}`}
+                    className={`w-20 h-20 object-cover rounded-b-lg cursor-pointer border ${
+                      mainimage === img.url ? "border-black" : "border-gray-400"
+                    }`}
+                    onClick={() => setMainimage(img.url)}
+                  />
+                ))}
+              </div>
+              <div className="md:w-1/2">
+                <div className="mb-4">
+                  <img
+                    src={mainimage}
+                    alt="main product"
+                    className="w-full h-auto object-cover rounded-lg"
+                  />
+                </div>
+              </div>
+              <div className="md:hidden flex overscroll-x-auto space-x-4 mb-4">
+                {allImages.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img.url}
+                    alt={img.alTtext || `thumnail${index}`}
+                    className={`w-20 h-20 object-cover rounded-b-lg cursor-pointer border ${
+                      mainimage === img.url ? "border-black" : "border-gray-400"
+                    }`}
+                    onClick={() => setMainimage(img.url)}
+                  />
+                ))}
+              </div>
+              <div className="md:1/2 md:ml-10">
+                <h1 className="text-2xl md:text-3xl font-semibold mb-2">
+                  {bestseller.name}
+                </h1>
+                <p className="text-lg text-gray-600 mb-1 line-through">
+                  {bestseller.originalprice}
+                </p>
+                <p className="text-xl text-gray-500 mb-2">
+                  {bestseller.price} Taka
+                </p>
+                <p className="text-gray-600 mb-4">{bestseller.description}</p>
+                <div className="mb-4">
+                  <p className="text-gray-700">Color:</p>
+                  <div className="flex gap-2 mt-2">
+                    {bestseller.colors?.map((color, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedColor(color)}
+                        className={`${
+                          selectedColor === color
+                            ? "bg-black text-white"
+                            : "bg-gray-200 text-gray-700"
+                        } px-4 py-2 rounded`}
+                      >
+                        {color}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <p className="text-gray-700">Size:</p>
+                  <div className="flex gap-2 mt-2">
+                    {bestseller.sizes?.map((size, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedsize(size)}
+                        className={`${
+                          selectedSize === size
+                            ? "bg-black text-white"
+                            : "bg-gray-200 text-gray-700"
+                        } px-4 py-2 rounded`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <p className="text-gray-700">Quantity</p>
+                  <div className="flex items-center space-x-4 mt-2">
+                    <button
+                      onClick={() => handlesetQuantity("minus")}
+                      className="px-2 py-1 bg-gray-200 rounded text-lg"
+                    >
+                      -
+                    </button>
+                    <span className="text-lg">{quantity}</span>
+                    <button
+                      onClick={() => handlesetQuantity("plus")}
+                      className="px-2 py-1 bg-gray-200 rounded text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <button
+                  onClick={HandleAddtoCart}
+                  disabled={isButtonDisable}
+                  className={`bg-black text-white py-2 px-6 rounded w-full mb-4 cursor-pointer  duration-300 uppercase ${
+                    isButtonDisable
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover:bg-teal-600"
+                  }`}
+                >
+                  {isButtonDisable ? "adding..." : "Add to cart"}
+                </button>
+                <div className="mt-10 text-gray-700">
+                  <h3 className="text-xl font-bold mb-4">Characteristics</h3>
+                  <table className="w-full text-left text-sm text-gray-600">
+                    <tbody>
+                      <tr>
+                        <td className="py-1">Brand</td>
+                        <td className="py-1">{bestseller.brand}</td>
+                      </tr>
+                      <tr>
+                        <td className="py-1">Material</td>
+                        <td className="py-1">{bestseller.material}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div className="mt-20">
+              <h2 className="text-2xl text-center font-medium mb-4">
+                You May Also Like
+              </h2>
+              <ProductGrid
+                products={similarProducts}
+                productid={bestseller._id}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
