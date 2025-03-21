@@ -11,16 +11,16 @@ const FilterSidebar = () => {
     size: [],
     material: [],
     brand: [],
-    minpirce: 0,
-    maxprice: 10000,
+    minPirce: 0,
+    maxPrice: 10000,
   });
   const [priceRange, setPriceRange] = useState([0, 10000]);
-  const Categorys = ["topwear", "bottomwear", "footwear"];
+  const Categorys = ["Top Wear", "Bottom Wear", ];
   const Colors = ["red", "blue", "black", "white", "green", "yellow", "orange"];
   const Sizes = ["S", "M", "L", "XL", "XXL"];
-  const Materials = ["cotton", "polyester", "leather", "synthetic"];
-  const Brands = ["adidas", "nike", "puma", "reebok"];
-  const Genders = ["male", "female"];
+  const Materials = ["Cotton", "Wool", "Denim", "Polyester", "Silk" ,"Linen" , "Viscose" , "Fleece"];
+  const Brands = ["Urban Threads", "Modern Fit", "Street Style", "Beach Breeze" ,"Fashionista" , "ShicStyle" ];
+  const Genders = ["Men", "Women"];
 
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
@@ -31,11 +31,11 @@ const FilterSidebar = () => {
       size: params.size ? params.size.split(",") : [],
       material: params.material ? params.material.split(",") : [],
       brand: params.brand ? params.brand.split(",") : [],
-      minprice: params.minprice || 0,
-      maxprice: params.maxprice || 10000,
+      minPrice: params.minPrice || 0,
+      maxPrice: params.maxPrice || 10000,
     });
 
-    setPriceRange([0, params.maxprice || 10000]);
+    setPriceRange([0, params.maxPrice || 10000]);
   }, [searchParams]);
 
   const hanldefilterchange = (e) => {
@@ -72,7 +72,7 @@ const FilterSidebar = () => {
   const handlepriceChange = (e) => {
     const newPrice = e.target.value;
     setPriceRange([0, newPrice]);
-    const newFilter = { ...filters, minprice: 0, maxprice: newPrice };
+    const newFilter = { ...filters, minPrice: 0, maxPrice: newPrice };
     setFilters(newFilter);
     updateulrParams(newFilter);
   };
@@ -196,7 +196,7 @@ const FilterSidebar = () => {
           name="priceRange"
           min={0}
           max={10000}
-          value={priceRange[1]}
+          defaultValue={priceRange[1]}
           onChange={handlepriceChange}
           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
         />

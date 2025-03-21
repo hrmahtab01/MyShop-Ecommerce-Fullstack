@@ -18,11 +18,11 @@ const products = [
       gender: "Men",
       images: [
         {
-          url: "https://picsum.photos/500/500?random=39",
+          url: "https://hips.hearstapps.com/hmg-prod/images/gettyimages-1334509398a-6494a6fcb947f.jpg?resize=980:*",
           altText: "Classic Oxford Button-Down Shirt Front View",
         },
         {
-          url: "https://picsum.photos/500/500?random=40",
+          url: "https://tse2.mm.bing.net/th?id=OIP.9LrKbcq2jR8OzWyro7FykQHaLH&pid=15.1",
           altText: "Classic Oxford Button-Down Shirt Back View",
         },
       ],
@@ -46,11 +46,11 @@ const products = [
       gender: "Men",
       images: [
         {
-          url: "https://picsum.photos/500/500?random=41",
+          url: "https://www.moderngentlemanmagazine.com/wp-content/uploads/2024/04/Crisp-White-Shirt-and-Chinos-Casual-Outfit-650x813.jpg",
           altText: "Slim-Fit Stretch Shirt Front View",
         },
         {
-          url: "https://picsum.photos/500/500?random=42",
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNSFwMl8-NBIG0CDn3gJ3OfnUiCYAq49aQAw&usqp=CAU",
           altText: "Slim-Fit Stretch Shirt Back View",
         },
       ],
@@ -74,11 +74,11 @@ const products = [
       gender: "Men",
       images: [
         {
-          url: "https://picsum.photos/500/500?random=43",
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY8hfwzzj7-_Ds8gW1_IFtYk-dAurOuJyUUw&usqp=CAU",
           altText: "Casual Denim Shirt Front View",
         },
         {
-          url: "https://picsum.photos/500/500?random=44",
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4eLFIPjMk6UCqGveE6w8_jWCKsX1PU_fyZw&usqp=CAU",
           altText: "Casual Denim Shirt Back View",
         },
       ],
@@ -102,11 +102,11 @@ const products = [
       gender: "Men",
       images: [
         {
-          url: "https://picsum.photos/500/500?random=45",
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUlUV5dtDIKtU16J7YTNYRyAgob8-RPlwJfQ&usqp=CAU",
           altText: "Printed Resort Shirt Front View",
         },
         {
-          url: "https://picsum.photos/500/500?random=1",
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfSs_ejobvI5BkZqdWIu1VdHXbg99iVsAsfg&usqp=CAU",
           altText: "Printed Resort Shirt Back View",
         },
       ],

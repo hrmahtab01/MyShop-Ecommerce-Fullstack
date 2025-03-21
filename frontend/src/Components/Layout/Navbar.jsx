@@ -30,25 +30,25 @@ const Navbar = () => {
           </div>
           <div className="hidden md:flex space-x-6">
             <Link
-              to={"/collections/all"}
+              to={"/collections/all?gender=Men"}
               className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
             >
               Men
             </Link>
             <Link
-              to={"/collections/all"}
+              to={"/collections/all?gender=Women"}
               className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
             >
               women
             </Link>
             <Link
-              to={"/collections/topwear"}
+              to={"/collections/all?category=Top Wear"}
               className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
             >
               Top wear
             </Link>
             <Link
-              to={"/collections/bottomwear"}
+              to={"/collections/all?category=Bottom Wear"}
               className="text-gray-700 hover:text-teal-500 duration-300 text-sm font-medium uppercase"
             >
               bottom wear
@@ -108,28 +108,28 @@ const Navbar = () => {
           <h2 className="text-xl font-semibold mb-4"> Menu</h2>
           <nav className="space-y-4">
             <Link
-              to={"#"}
+              to={"/collections/all?gender=Men"}
               onClick={Toggolenavdrower}
               className="block text-gray-600 hover:text-teal-500 duration-300"
             >
               Men
             </Link>
             <Link
-              to={"#"}
+              to={"/collections/all?gender=Women"}
               onClick={Toggolenavdrower}
               className="block text-gray-600 hover:text-teal-500 duration-300"
             >
               Women
             </Link>
             <Link
-              to={"#"}
+              to={"/collections/all?category=Top Wear"}
               onClick={Toggolenavdrower}
               className="block text-gray-600 hover:text-teal-500 duration-300"
             >
               Top wear
             </Link>
             <Link
-              to={"#"}
+              to={"/collections/all?category=Bottom Wear"}
               onClick={Toggolenavdrower}
               className="block text-gray-600 hover:text-teal-500 duration-300"
             >

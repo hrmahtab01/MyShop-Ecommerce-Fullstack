@@ -4,39 +4,23 @@ import FilterSidebar from "../Components/Products/FilterSidebar";
 import ShortOption from "../Components/Products/ShortOption";
 import ProductGrid from "../Components/Products/ProductGrid";
 import axios from "axios";
+import { useParams, useSearchParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllproducts } from "../../Slices/productSlice";
 
 const CollectionPage = () => {
-  const [products, setProducts] = useState([]);
+  const { collection } = useParams();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const { product, loading, error } = useSelector((state) => state.productData);
   const sidebarRef = useRef();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [params, setParams] = useState({
-    collection: "",
-    size: "",
-    color: "",
-    gender: "",
-    minPrice: "",
-    maxPrice: "",
-    sortBy: "",
-    search: "",
-    category: "",
-    brand: "",
-    limit: "",
-    material: "",
-  });
+  const queryParams = Object.fromEntries([...searchParams]);
 
-  const quary = new URLSearchParams();
-  if (params.collection) quary.append("collection", params.collection);
-  if (params.size) quary.append("size", params.size);
-  if (params.color) quary.append("color", params.color);
-  if (params.gender) quary.append("gender", params.gender);
-  if (params.minPrice) quary.append("minPrice", params.minPrice);
-  if (params.maxPrice) quary.append("maxPrice", params.maxPrice);
-  if (params.sortBy) quary.append("sortBy", params.sortBy);
-  if (params.search) quary.append("search", params.search);
-  if (params.category) quary.append("category", params.category);
-  if (params.brand) quary.append("brand", params.brand);
-  if (params.limit) quary.append("limit", params.limit);
-  if (params.material) quary.append("material", params.material);
+  useEffect(() => {
+    dispatch(fetchAllproducts({ collection, ...queryParams }));
+  }, [dispatch, collection, searchParams]);
+
   const toggolesidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -51,22 +35,6 @@ const CollectionPage = () => {
       document.removeEventListener("mousedown", handleclcikOutside);
     };
   }, []);
-
-  useEffect(() => {
-    const fetchdatAllProduct = () => {
-      axios
-        .get(
-          `http://localhost:4400/api/v1/product/allproduct?${quary.toString()}`
-        )
-        .then((result) => {
-          setProducts(result.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    fetchdatAllProduct();
-  }, [quary]);
 
   return (
     <div className="flex flex-col lg:flex-row">
@@ -90,7 +58,7 @@ const CollectionPage = () => {
         <h2 className="text-2xl uppercase mb-4">All Collection</h2>
         {/* short options */}
         <ShortOption />
-        <ProductGrid products={products} />
+        <ProductGrid products={product} loading={loading} error={error} />
       </div>
     </div>
   );

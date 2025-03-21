@@ -18,7 +18,7 @@ export const fetchAllproducts = createAsyncThunk(
     limit,
     material,
   }) => {
-    const quary = URLSearchParams();
+    const quary = new URLSearchParams();
     if (collection) quary.append("collection", collection);
     if (size) quary.append("size", size);
     if (color) quary.append("color", color);
@@ -170,7 +170,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchSimilarProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.product = action.payload;
+        state.similarProducts = action.payload;
       })
       .addCase(fetchSimilarProduct.rejected, (state, action) => {
         state.loading = false;

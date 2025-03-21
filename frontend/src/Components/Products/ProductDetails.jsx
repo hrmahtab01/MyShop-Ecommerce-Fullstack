@@ -3,6 +3,9 @@ import { toast } from "sonner";
 import ProductGrid from "./ProductGrid";
 import axios from "axios";
 import { useLocation, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+
+import { addtoCart } from "../../../Slices/cartSlice";
 
 const ProductDetails = () => {
   const [mainimage, setMainimage] = useState(0);
@@ -15,6 +18,9 @@ const ProductDetails = () => {
   const [similarProducts, setSimilarProducts] = useState([]);
   const location = useLocation();
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.userData?.value?.user?.id);
+  console.log(userId);
 
   useEffect(() => {
     const fetchBestsellers = () => {
@@ -41,18 +47,35 @@ const ProductDetails = () => {
     if (action === "plus") setQuantity((prev) => prev + 1);
   };
   const HandleAddtoCart = () => {
+    setIsButtonDisable(true);
     if (!selectedColor || !selectedSize) {
       toast.error("please select a size and color before adding to cart", {
         duration: 1000,
       });
+      setTimeout(() => {
+        setIsButtonDisable(false);
+      }, 500);
     }
-    setIsButtonDisable(true);
-    setTimeout(() => {
-      toast.success("product add to cart successfully", {
-        duration: 1000,
-      });
-      setIsButtonDisable(false);
-    }, 500);
+
+    if (selectedColor && selectedSize) {
+      dispatch(
+        addtoCart({
+          productId: bestseller._id,
+          color: selectedColor,
+          size: selectedSize,
+          quantity,
+          userId: userId,
+        })
+      )
+        .then(() => {
+          toast.success("Product added to cart", {
+            duration: 1000,
+          });
+        })
+        .finally(() => {
+          setIsButtonDisable(false);
+        });
+    }
   };
 
   useEffect(() => {
@@ -82,7 +105,7 @@ const ProductDetails = () => {
         });
     };
     fetchsingleProduct();
-  },[id]);
+  }, [id]);
 
   return (
     <>
@@ -108,7 +131,7 @@ const ProductDetails = () => {
                   <img
                     src={mainimage}
                     alt="main product"
-                    className="w-full h-auto object-cover rounded-lg"
+                    className="w-full h-auto md:h-[500px] object-cover rounded-lg"
                   />
                 </div>
               </div>
@@ -251,7 +274,7 @@ const ProductDetails = () => {
                   <img
                     src={mainimage}
                     alt="main product"
-                    className="w-full h-auto object-cover rounded-lg"
+                    className="w-full h-auto md:h-[500px] object-cover rounded-lg"
                   />
                 </div>
               </div>

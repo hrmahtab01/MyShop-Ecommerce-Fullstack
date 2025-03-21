@@ -19,7 +19,7 @@ const Login = () => {
         toast.success(response.data.message || "Login successfully");
         setTimeout(() => {
           setLoading(false);
-          navigate("/");
+          navigate("/profile");
         }, 500);
       })
       .catch((error) => {
