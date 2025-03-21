@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Collection } from "mongoose";
+
 
 export const fetchAllproducts = createAsyncThunk(
   "product/fetchAllproducts",
