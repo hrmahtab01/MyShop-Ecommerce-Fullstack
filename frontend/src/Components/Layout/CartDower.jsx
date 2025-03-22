@@ -4,7 +4,7 @@ import Cartcontents from "../Cart/Cartcontents";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 const CartDower = ({ cartdoweropen, Handlecartdowertoggole }) => {
-  const userId = useSelector((state) => state.userData.value.user.id);
+  const userId = useSelector((state) => state.userData?.value?.user?.id);
   const cartData = useSelector((state) => state.cartData.cart);
   console.log(cartData);
   

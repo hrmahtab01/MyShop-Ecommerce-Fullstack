@@ -1,22 +1,21 @@
 const express = require("express");
 
-const { protect } = require("../../Middleware/authMIddleware");
 const {
   orderCreateController,
   paymentSuccessController,
   PaymentfailController,
   PaymentCencelController,
   getAllorderController,
-  getsingleOrderController
+  getsingleOrderController,
 } = require("../../Controllers/OrderController");
 
 const router = express.Router();
 
-router.post("/create", protect, orderCreateController);
+router.post("/create", orderCreateController);
 router.post("/success/:id", paymentSuccessController);
-router.post("/fail/:id", protect, PaymentfailController);
-router.post("/cancel/:id", protect, PaymentCencelController);
-router.get("/allorder", protect, getAllorderController);
-router.get("/singleorder/:id", protect, getsingleOrderController);
+router.post("/fail/:id", PaymentfailController);
+router.post("/cancel/:id", PaymentCencelController);
+router.get("/allorder", getAllorderController);
+router.get("/singleorder/:id", getsingleOrderController);
 
 module.exports = router;

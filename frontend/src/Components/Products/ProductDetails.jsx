@@ -2,7 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 import ProductGrid from "./ProductGrid";
 import axios from "axios";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
 import { addtoCart } from "../../../Slices/cartSlice";
@@ -20,7 +20,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.userData?.value?.user?.id);
-  console.log(userId);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBestsellers = () => {
@@ -50,10 +50,19 @@ const ProductDetails = () => {
     setIsButtonDisable(true);
     if (!selectedColor || !selectedSize) {
       toast.error("please select a size and color before adding to cart", {
-        duration: 1000,
+        duration: 500,
       });
       setTimeout(() => {
         setIsButtonDisable(false);
+      }, 1500);
+    }
+
+    if (!userId) {
+      toast.error("please login before adding to cart", {
+        duration: 1000,
+      });
+      setTimeout(() => {
+        navigate("/login");
       }, 500);
     }
 

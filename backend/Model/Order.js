@@ -1,113 +1,61 @@
 const mongoose = require("mongoose");
 
-const orderItemSchema = mongoose.Schema(
+const orderschema = mongoose.Schema(
   {
-    productId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-      require: true,
+      ref: "User",
     },
+    cartitem: [
+      {
+        productid: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+        },
+      },
+    ],
     name: {
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
-    price: {
+    totalprice: {
       type: Number,
-      required: true,
     },
-    quantity: {
-      type: Number,
-      required: true,
-      default: 1,
-    },
-  },
-  {
-    _id: false,
-  }
-);
-
-const orderSchema = mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    ordertItems: [orderItemSchema],
-    shippingAddress: {
-      address: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      postalCode: {
-        type: String,
-        required: true,
-      },
-      country: {
-        type: String,
-        required: true,
-      },
-    },
-    paymentMethod: {
-      type: String,
-      enum: ["COD", "online"],
-    },
-    totalPrice: {
-      type: Number,
-      required: true,
-    },
-    isPaid: {
-      type: Boolean,
-      default: false,
-    },
-    paidAt: {
-      type: Date,
-    },
-    paymentStatus: {
+    paymentstatus: {
       type: String,
       enum: ["paid", "unpaid"],
       default: "unpaid",
     },
-    paymentDetails: {
-      type: mongoose.Schema.Types.Mixed,
+    paymentmethod: {
+      type: String,
+      enum: ["COD", "online"],
     },
-    isFinalized: {
-      type: Boolean,
-      default: false,
+    address: {
+      type: String,
+      required: true,
     },
-    finalizedAt: {
-      type: Date,
+    city: {
+      type: String,
+      required: true,
     },
-    transId: {
+    phone: {
+      type: String,
+      required: true,
+    },
+    email: {
       type: String,
     },
-    status: {
+    trans_id: {
       type: String,
-      enum: ["processing", "shiped", "delivered", "cancelled"],
-      default: "processing",
-    },
-    isdelivered: {
-      type: Boolean,
-      default: false,
-    },
-    deliveredAt: {
-      type: Date,
-      default: Date.now,
     },
   },
-
   {
     timestamps: true,
   }
 );
 
-const orderModel = mongoose.model("Order", orderSchema);
+const orderModel = mongoose.model("Order", orderschema);
 module.exports = orderModel;

@@ -6,54 +6,62 @@ const is_live = false;
 
 async function orderCreateController(req, res) {
   const {
-    ordertItems,
-    shippingAddress,
-    paymentMethod,
-    totalPrice,
-    paymentStatus,
-    transId,
-    userId,
+    user,
+    cartitem,
+    totalprice,
+    paymentstatus,
+    paymentmethod,
+    address,
+    city,
+    phone,
+    name,
+    email,
+    trans_id,
   } = req.body;
 
   try {
-    if (paymentMethod === "COD") {
-      const neworder = await orderModel.create({
-        userId,
-        ordertItems: ordertItems,
-        shippingAddress,
-        paymentMethod: "COD",
-        totalPrice,
-        paymentStatus: "unpaid",
+    if (paymentmethod === "COD") {
+      const order = new orderModel({
+        user,
+        cartitem,
+        totalprice,
+        paymentstatus,
+        paymentmethod,
+        address,
+        city,
+        phone,
+        name,
+        email,
       });
-
+      await order.save();
       return res.status(201).send({
         success: true,
-        message: "checkout created successfully",
-        data: neworder,
+        message: "order placed successfully",
+        data: order,
       });
     } else {
       const transid = Date.now();
       const data = {
-        total_amount: totalPrice,
+        total_amount: 100,
         currency: "BDT",
         tran_id: transid,
         success_url: `http://localhost:4400/api/v1/order/success/${transid}`,
         fail_url: `http://localhost:4400/api/v1/order/fail/${transid}`,
-        cancel_url: `http://localhost:4400/api/v1/order/cancel/${transid}`,
-        ipn_url: `http://localhost:4400/api/v1/order/ipn/${transid}`,
+        cancel_url: `http://localhost:4400/api/v1/order/cencel/${transid}`,
+        ipn_url: "http://localhost:4400/api/v1/order/ipn",
         shipping_method: "Courier",
         product_name: "Computer.",
         product_category: "Electronic",
         product_profile: "general",
-        cus_name: "Customer Name",
-        cus_email: "customer@example.com",
-        cus_add1: shippingAddress.address,
+        cus_name: name,
+        cus_email: email,
+        cus_add1: address,
         cus_add2: "Dhaka",
-        cus_city: shippingAddress.city,
+        cus_city: city,
         cus_state: "Dhaka",
-        cus_postcode: shippingAddress.postalCode,
-        cus_country: shippingAddress.country,
-        cus_phone: "01711111111",
+        cus_postcode: "1000",
+        cus_country: "Bangladesh",
+        cus_phone: phone,
         cus_fax: "01711111111",
         ship_name: "Customer Name",
         ship_add1: "Dhaka",
@@ -63,43 +71,43 @@ async function orderCreateController(req, res) {
         ship_postcode: 1000,
         ship_country: "Bangladesh",
       };
-      console.log(data);
-
       const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
       sslcz.init(data).then(async (apiResponse) => {
-        const neworder = new orderModel({
-          userId,
-          ordertItems: ordertItems,
-          shippingAddress,
-          paymentMethod: "online",
-          totalPrice,
-          transId: transid,
+        const order = new orderModel({
+          user,
+          cartitem,
+          totalprice,
+          paymentstatus,
+          paymentmethod,
+          address,
+          city,
+          phone,
+          name,
+          email,
+          trans_id: transid,
         });
-        await neworder.save();
+
+        await order.save();
         let GatewayPageURL = apiResponse.GatewayPageURL;
-        res.send(GatewayPageURL);
+
+        return res.status(201).send({
+          success: true,
+          message: "order placed successfully",
+          data: order,
+          url: GatewayPageURL,
+        });
       });
     }
   } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: error.message || "something went wrong",
-    });
+    return res.status(500).send({ success: false, error: error.message });
   }
 }
 
 async function paymentSuccessController(req, res) {
   const { id } = req.params;
   try {
-    const findid = await orderModel
-      .findOneAndUpdate(
-        { transId: id },
-        {
-          paymentStatus: "paid",
-          isPaid: true,
-        },
-        { new: true }
-      )
+    const updateorder = await orderModel
+      .findOneAndUpdate({ trans_id: id }, { paymentstatus: "paid" })
       .then(() => {
         return res.redirect("http://localhost:5173/success");
       });
