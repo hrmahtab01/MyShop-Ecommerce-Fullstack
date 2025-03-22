@@ -173,6 +173,30 @@ async function getsingleOrderController(req, res) {
   } catch (error) {}
 }
 
+async function getUserOrderController(req, res) {
+  const { userId } = req.params;
+
+  try {
+    const userOder = await orderModel.find({ user: userId });
+    if (!userOder) {
+      return res.status(404).send({
+        success: false,
+        message: "order not found",
+      });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "single order get successfully",
+      data: userOder,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+
 module.exports = {
   orderCreateController,
   paymentSuccessController,
@@ -180,4 +204,5 @@ module.exports = {
   PaymentCencelController,
   getAllorderController,
   getsingleOrderController,
+  getUserOrderController,
 };

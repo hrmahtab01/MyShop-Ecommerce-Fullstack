@@ -16,6 +16,7 @@ const Checkout = () => {
   const [paymentmethod, Setpaymentmethod] = useState("COD");
   const [loader, setLoader] = useState(false);
   const cartData = useSelector((state) => state.cartData.cart);
+  console.log(cartData);
 
   const totalPrice = cartData.products?.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -27,6 +28,11 @@ const Checkout = () => {
     return {
       productid: item.productId,
       quantity: item.quantity,
+      size: item.size,
+      color: item.color,
+      name: item.name,
+      image: item.image,
+      price: item.price,
     };
   });
 
@@ -188,16 +194,24 @@ const Checkout = () => {
               <div>
                 {cartData.products.map((item) => (
                   <>
-                    <div className="flex justify-between items-center w-[350px] md:w-[422px] h-[54px]">
-                      <div className="flex gap-6 items-center ">
+                    <div className="flex justify-between items-center w-[350px] md:w-[422px] ">
+                      <div className="flex gap-6 items-center mb-3 ">
                         <img
-                          className="w-[49px] h-[42px] object-cover"
+                          className="w-[60px] h-[60px] object-cover mb-3"
                           src={item?.image || ""}
                           alt="monitorImage"
                         />
-                        <p className="text-base text-primaryColor font-normal font-Nunito">
-                          {item?.name}
-                        </p>
+                        <div className="flex flex-col ">
+                          <p className="text-base text-primaryColor font-normal font-Nunito">
+                            {item?.name}
+                          </p>
+                          <p className=" font-normal font-Nunito">
+                            Color:{item?.color}
+                          </p>
+                          <p className=" font-normal font-Nunito">
+                            Size: {item?.size}
+                          </p>
+                        </div>
                       </div>
                       <p className="text-base text-primaryColor font-normal font-Nunito">
                         {item?.price}
@@ -293,7 +307,7 @@ const Checkout = () => {
                 ) : (
                   <button
                     onClick={Handleplaceorder}
-                    className="md:w-[211px] w-full h-[56px] bg-primary text-base text-white font-medium hover:bg-black duration-300 font-Nunito rounded-[4px] mt-[32px]"
+                    className="md:w-[211px] w-full h-[56px] bg-red-500 text-base text-white font-medium hover:bg-black duration-300 font-Nunito rounded-[4px] mt-[32px]"
                   >
                     Place Order
                   </button>

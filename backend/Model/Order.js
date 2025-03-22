@@ -15,6 +15,21 @@ const orderschema = mongoose.Schema(
         quantity: {
           type: Number,
         },
+        price: {
+          type: Number,
+        },
+        color: {
+          type: String,
+        },
+        size: {
+          type: String,
+        },
+        name: {
+          type: String,
+        },
+        image: {
+          type: String,
+        },
       },
     ],
     name: {
