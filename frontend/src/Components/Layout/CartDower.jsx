@@ -2,11 +2,21 @@ import React, { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import Cartcontents from "../Cart/Cartcontents";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 const CartDower = ({ cartdoweropen, Handlecartdowertoggole }) => {
+  const userId = useSelector((state) => state.userData.value.user.id);
+  const cartData = useSelector((state) => state.cartData.cart);
+  console.log(cartData);
+  
+
   const navigate = useNavigate();
   const HandleCheckout = () => {
     Handlecartdowertoggole();
-    navigate("/checkout");
+    if (!userId) {
+      navigate("/login?redirect=checkout");
+    } else {
+      navigate("/checkout");
+    }
   };
   return (
     <div
@@ -23,20 +33,29 @@ const CartDower = ({ cartdoweropen, Handlecartdowertoggole }) => {
       {/* cart content with scroll able area */}
       <div className="flex-grow p-4 overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
+       
 
         {/* component for cart content */}
-        <Cartcontents />
+        {cartData && cartData.products.length > 0 ?  (
+          <Cartcontents cart={cartData} userId={userId} />
+        ) : (
+          <p>Your cart is empty</p>
+        )}
       </div>
       <div className="p-4 bg-white sticky bottom-0">
-        <button
-          onClick={HandleCheckout}
-          className="w-full bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-black transition duration-300 "
-        >
-          CheckOut
-        </button>
-        <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
-          Sipping ,taxes , and discount codes calculet at checkout.
-        </p>
+        {cartData && cartData.products.length > 0 &&  (
+          <>
+            <button
+              onClick={HandleCheckout}
+              className="w-full bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-black transition duration-300 "
+            >
+              CheckOut
+            </button>
+            <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
+              Sipping ,taxes , and discount codes calculet at checkout.
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
