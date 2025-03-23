@@ -5,7 +5,7 @@ export const fetchAdminproducts = createAsyncThunk(
   "admin/fetchAdminproducts",
   async () => {
     const response = await axios.get(
-      "http://localhost:4400/api/v1/admin/product",
+      "http://localhost:4400/api/v1/product/allproduct",
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

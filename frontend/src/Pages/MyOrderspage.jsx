@@ -1,49 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 const MyOrderspage = () => {
   const [orders, setOrders] = useState([]);
-  const navigate = useNavigate()
+  const [orderData, setOrderData] = useState({});
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const userId = useSelector((state) => state.userData?.value?.user?.id);
+
+  const fetchOrders = async () => {
+    await axios
+      .get(`http://localhost:4400/api/v1/order/userorder/${userId}`)
+      .then((response) => {
+        setOrderData(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    setTimeout(() => {
-      let fetchdata = [
-        {
-          _id: 1,
-          CreateAt: Date.now(),
-          address: { city: "dhaka", country: "bangladesh" },
-          orderItems: [
-            {
-              name: "product 1",
-              image:
-                "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/8140f313904805.5627a0dc02f78.jpg",
-            },
-          ],
-          totalPrice: 154,
-          isPaid: true,
-        },
-        {
-          _id: 2,
-          CreateAt: Date.now(),
-          address: { city: "dhaka", country: "bangladesh" },
-          orderItems: [
-            {
-              name: "product 2",
-              image:
-                "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/333c1d13904805.5627a0902b9f8.jpg",
-            },
-          ],
-          totalPrice: 1554,
-          isPaid: true,
-        },
-      ];
-      setOrders(fetchdata);
-    }, 1000);
-  });
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+    fetchOrders();
+  }, [userId, navigate]);
 
-  const HandlerowClick =(id)=>{
-    navigate(`/order/${id}`)
-  }
+  const HandlerowClick = (id) => {
+    console.log(id);
+    navigate(`/order/${id}`);
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
@@ -63,8 +52,8 @@ const MyOrderspage = () => {
           </thead>
 
           <tbody>
-            {orders.length > 0 ? (
-              orders.map((order) => (
+            {orderData.length > 0 ? (
+              orderData.map((order) => (
                 <tr
                   onClick={() => HandlerowClick(order._id)}
                   key={order._id}
@@ -72,38 +61,36 @@ const MyOrderspage = () => {
                 >
                   <td className="py-2 px-2 sm:py-4 sm:px-4">
                     <img
-                      src={order.orderItems[0].image}
-                      alt={order.orderItems[0].name}
+                      src={order.cartitem[0].image}
+                      alt={order.name}
                       className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg"
                     />
                   </td>
                   <td className="px-2 py-2  sm:py-4 sm:px-4 font-medium text-gray-900 whitespace-nowrap">
-                    #{order._id}
+                    #{order.cartitem[0].productid}
                   </td>
                   <td className="px-2 py-2  sm:py-4 sm:px-4">
-                    {new Date(order.CreateAt).toLocaleDateString()} {""}
-                    {new Date(order.CreateAt).toLocaleTimeString()}
+                    {new Date(order.createdAt).toLocaleDateString()} {""}
+                    {new Date(order.createdAt).toLocaleTimeString()}
                   </td>
                   <td className="px-2 py-2  sm:py-4 sm:px-4">
-                    {order.address
-                      ? `${order.address.city}, ${order.address.country}`
-                      : "N/A"}
+                    {order ? `${order.city}, ${order.address}` : "N/A"}
                   </td>
                   <td className="px-2 py-2  sm:py-4 sm:px-4">
-                    {order.orderItems.length}
+                    {order.cartitem[0].name}
                   </td>
                   <td className="px-2 py-2  sm:py-4 sm:px-4">
-                    {order.totalPrice}
+                    {order.cartitem[0].price}
                   </td>
                   <td className="px-2 py-2  sm:py-4 sm:px-4">
                     <span
                       className={`${
-                        order.isPaid
+                        order.paymentstatus === "paid"
                           ? "bg-green-100 text-green-700"
                           : "bg-red-100 text-red-700"
                       } px-2 py-1 rounded-full text-xs sm:text-sm font-medium`}
                     >
-                      {order.isPaid ? "paid" : "panding"}
+                      {order.paymentstatus === "paid" ? "paid" : "panding"}
                     </span>
                   </td>
                 </tr>

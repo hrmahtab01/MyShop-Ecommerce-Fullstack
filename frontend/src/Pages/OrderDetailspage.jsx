@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router";
@@ -6,35 +7,21 @@ const OrderDetailspage = () => {
   const [orderDetails, setOrderDetails] = useState(null);
   const { id } = useParams();
 
+  const fetchOrderDetails = async () => {
+    await axios
+      .get(`http://localhost:4400/api/v1/order/singleorder/${id}`)
+      .then((response) => {
+        setOrderDetails(response.data.data);
+        console.log(response.data.data);
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
-    const fetchOrderdata = {
-      _id: id,
-      createdAt: new Date(),
-      isPaid: true,
-      isDelivered: false,
-      paymentMethod: "COD",
-      shppingMethod: "standard",
-      shppingAddress: { city: "data", country: "bangladesh" },
-      orderItems: [
-        {
-          productID: "1",
-          name: "jacket",
-          price: 5000,
-          quantity: 1,
-          image:
-            "https://img.freepik.com/premium-photo/free-photo-fashion-portrait-young-beautiful-confident-lady-wearing-trendy-winter-outfits_1124573-77227.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-        },
-        {
-          productID: "2",
-          name: "saree",
-          price: 5000,
-          quantity: 2,
-          image:
-            "https://img.freepik.com/premium-photo/free-photo-fashion-portrait-young-beautiful-confident-lady-wearing-trendy-winter-outfits_1124573-77227.jpg?ga=GA1.1.1324640529.1734293495&semt=ais_hybrid",
-        },
-      ],
-    };
-    setOrderDetails(fetchOrderdata);
+    fetchOrderDetails();
   }, [id]);
 
   return (
@@ -48,7 +35,7 @@ const OrderDetailspage = () => {
           <div className="flex flex-col sm:flex-row justify-between mb-8">
             <div>
               <h3 className="text-lg md:text-xl font-semibold">
-                Order ID : #{orderDetails._id}
+                Order ID : #{id}
               </h3>
               <p className="text-gray-600">
                 {new Date(orderDetails.createdAt).toDateString()}
@@ -57,16 +44,16 @@ const OrderDetailspage = () => {
             <div className="flex flex-col items-start sm:items-end mt-4 sm:mt-0">
               <span
                 className={`${
-                  orderDetails.isPaid
+                  orderDetails.paymentstatus ==="paid"
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"
                 } px-3 py-1 rounded-full text-sm font-medium mb-2`}
               >
-                {orderDetails.isPaid ? "Approved" : "Pending"}
+                { orderDetails.paymentstatus ==="paid" ? "Approved" : "Pending"}
               </span>
               <span
                 className={`${
-                  !orderDetails.isPaid
+                  ! orderDetails.paymentstatus ==="paid"
                     ? "bg-green-100 text-green-700"
                     : "bg-yellow-100 text-yellow-700"
                 } px-3 py-1 rounded-full text-sm font-medium mb-2`}
@@ -79,15 +66,15 @@ const OrderDetailspage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
             <div>
               <h4 className="text-lg font-semibold mb-2">Payment Info</h4>
-              <p>Payment method :{orderDetails.paymentMethod}</p>
-              <p>Status: {orderDetails.isPaid ? "Paid" : "Unpaid"}</p>
+              <p>Payment method :{orderDetails.paymentmethod}</p>
+              <p>Status: {orderDetails.paymentstatus==="paid" ? "Paid" : "Unpaid"}</p>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-2">Shipping Info</h4>
               <p>Shipping method :{orderDetails.shppingMethod}</p>
               <p>
                 Address:{" "}
-                {`${orderDetails.shppingAddress.city} , ${orderDetails.shppingAddress.country}`}
+                {`${orderDetails.city} , ${orderDetails.address}`}
               </p>
             </div>
           </div>
@@ -103,7 +90,7 @@ const OrderDetailspage = () => {
                 </tr>
               </thead>
               <tbody>
-                {orderDetails.orderItems.map((item) => (
+                {orderDetails.cartitem.map((item) => (
                   <tr key={item.productID}>
                     <td className="py-2 px-4 flex items-center">
                       <img

@@ -1,16 +1,21 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 function OrderManagement() {
-  const orders = [
-    {
-      _id: 4644,
-      user: {
-        name: "mango",
-      },
-      totalPrice: 4554,
-      Status: "processing",
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    const fetchAllOrder = async () => {
+      axios
+        .get("http://localhost:4400/api/v1/order/allorder")
+        .then((response) => {
+          setOrders(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchAllOrder();
+  }, []);
 
   const HandleStatusChange = (orderid, status) => {
     console.log({ id: orderid, status });
@@ -40,12 +45,12 @@ function OrderManagement() {
                   <th className="py-4 px-4 font-medium text-gray-900 whitespace-nowrap">
                     #{item._id}
                   </th>
-                  <th className="p-4">{item.user.name}</th>
-                  <th className="p-4">{item.totalPrice}</th>
+                  <th className="p-4">{item.name}</th>
+                  <th className="p-4">{item.totalprice}</th>
                   <th className="p-4">
                     <select
                       name=""
-                      value={item.Status}
+                      value={item.status}
                       onChange={(e) =>
                         HandleStatusChange(item._id, e.target.value)
                       }

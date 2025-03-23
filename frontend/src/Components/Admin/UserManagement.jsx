@@ -1,46 +1,89 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { use, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const UserManagement = () => {
-  const user = [
-    {
-      _id: 1,
-      name: "mango",
-      email: "withgaming50@gmail.com",
-      role: "admin",
-    },
-  ];
+  const userId = useSelector((state) => state.userData?.value.user);
+  const navigate = useNavigate();
   const [formData, setFormdata] = useState({
     name: "",
     email: "",
     password: "",
     role: "customer",
   });
+  const [allUser, setAllUser] = useState([]);
+
+  
+
+  const fetchAlluser = async () => {
+  await axios
+      .get("http://localhost:4400/api/v1/auth/alluser")
+      .then((response) => {
+        setAllUser(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchAlluser();
+  }, []);
+
+  useEffect(() => {
+    if (!userId.role === "admin") {
+      navigate("/");
+    }
+  }, [navigate, userId]);
 
   const handlechange = (e) => {
     setFormdata({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const Handlesubmit = (e) => {
+  const Handlesubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-
-    setFormdata({
-      name: "",
-      email: "",
-      password: "",
-      role: "customer",
-    });
+    await axios
+      .post("http://localhost:4400/api/v1/auth/signup", formData)
+      .then(() => {
+        toast.success("user added successfully");
+        setFormdata({
+          name: "",
+          email: "",
+          password: "",
+          role: "customer",
+        });
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message || "something went wrong");
+      });
   };
 
-  const handleUserRolechange = (userid, newrole) => {
-    console.log({ id: userid, role: newrole });
+  const handleUserRolechange = async (userid, newrole) => {
+    await axios
+      .patch(`http://localhost:4400/api/v1/auth/update/${userid}`, {
+        role: newrole,
+      })
+      .then((response) => {
+        toast.success(response.data.message);
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message || "something went wrong");
+      });
+    
   };
 
-  const HandleDeleteUser = (userid) => {
+  const HandleDeleteUser = async (userid) => {
     if (window.confirm("are you sure you want to delete this user")) {
-      console.log(userid);
+      axios
+        .delete(`http://localhost:4400/api/v1/auth/delete/${userid}`)
+        .then((response) => {
+          toast.success(response.data.message);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message || "something went wrong");
+        });
     }
-  
   };
 
   return (
@@ -112,7 +155,7 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {user.map((item) => (
+            {allUser.map((item) => (
               <tr key={item._id} className="border-b hover:bg-gray-50">
                 <td className="p-4 font-medium text-gray-700 whitespace-nowrap">
                   {item.name}

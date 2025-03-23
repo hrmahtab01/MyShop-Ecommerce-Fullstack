@@ -66,6 +66,11 @@ const orderschema = mongoose.Schema(
     trans_id: {
       type: String,
     },
+    status:{
+      type: String,
+      enum: ["pending", "shipped", "delivered"],
+      default: "pending",
+    }
   },
   {
     timestamps: true,

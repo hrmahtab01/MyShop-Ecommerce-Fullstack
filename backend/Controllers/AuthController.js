@@ -101,7 +101,7 @@ async function LoginController(req, res) {
       expiresIn: existingUser.role === "admin" ? "20m" : "1d",
     });
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: true,
     });
@@ -119,4 +119,60 @@ async function userprofileController(req, res) {
   res.send(req.user);
 }
 
-module.exports = { signupController, LoginController, userprofileController };
+async function upadateuserController(req, res) {
+  const { role } = req.body;
+  const { userId } = req.params;
+  try {
+    const user = await userModel.findOneAndUpdate(
+      { _id: userId },
+      { role: role },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).send({ message: "user not found" });
+    }
+    return res
+      .status(200)
+      .send({ message: "user updated successfully", data: user });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+}
+async function deleteuserController(req, res) {
+  const { id } = req.params;
+  try {
+    const user = await userModel.findOneAndDelete({ _id: id });
+    if (!user) {
+      return res.status(404).send({ message: "user not found" });
+    }
+    return res
+      .status(200)
+      .send({ message: "user deleted successfully", data: user });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+}
+const getAlluserController = async (req, res) => {
+  try {
+    const users = await userModel.find({});
+    return res.status(200).send({
+      success: true,
+      message: "all users get successfully",
+      data: users,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+};
+
+module.exports = {
+  signupController,
+  LoginController,
+  userprofileController,
+  upadateuserController,
+  deleteuserController,
+  getAlluserController,
+};

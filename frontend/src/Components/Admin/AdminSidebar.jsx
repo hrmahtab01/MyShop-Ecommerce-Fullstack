@@ -1,13 +1,24 @@
-import React from "react";
-import { FaBox, FaClipboardList, FaSignLanguage, FaSignOutAlt, FaUser } from "react-icons/fa";
+import React, { useState } from "react";
+import {
+  FaBox,
+  FaClipboardList,
+  FaSignLanguage,
+  FaSignOutAlt,
+  FaUser,
+} from "react-icons/fa";
 import { FaBoxOpen, FaShop } from "react-icons/fa6";
 import { Link, NavLink, useNavigate } from "react-router";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogout = () => {
-    navigate("/");
+    setLoading(true);
+    localStorage.removeItem("token");
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
   };
 
   return (
@@ -64,10 +75,17 @@ const AdminSidebar = () => {
           <span>Shop</span>
         </NavLink>
         <div className="mt-6">
-          <button onClick={handleLogout} className="w-full bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded flex items-center justify-center gap-2">
-            <FaSignOutAlt />
-            Logout
-          </button>
+          {loading ? (
+            <p className="text-center">Loading.....</p>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="w-full bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded flex items-center justify-center gap-2"
+            >
+              <FaSignOutAlt />
+              Logout
+            </button>
+          )}
         </div>
       </nav>
     </div>

@@ -16,7 +16,7 @@ const GenderCollectionSection = () => {
               Women's Collections
             </h2>
             <Link
-              to={"collection/all?gender=women"}
+              to={"collections/all?gender=Women"}
               className="text-gray-900 underline"
             >
               Shop Now
@@ -25,7 +25,7 @@ const GenderCollectionSection = () => {
         </div>
         <div className="flex-1 relative">
           <img
-            src="https://scontent.fdac140-1.fna.fbcdn.net/v/t39.30808-6/405335606_2076286892724728_4014104283922080168_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEIsEu_eAj9Z0lzB5QxpI9ZFZ4Hl64NpQgVngeXrg2lCFzYl6e87j7d7bvsDuKEDZc9CaYlpC2hTvQJaeWh3TlS&_nc_ohc=qIYSp_4qbpkQ7kNvgFCIpiM&_nc_oc=AdiEJy5O9AT8s4WatmIadpXvUVoPzdSFL894ZaVZWVYwSixdGQk0kp6-gBlxiSCPu8o&_nc_zt=23&_nc_ht=scontent.fdac140-1.fna&_nc_gid=7c_vedJZkc7tCGzd4RbQKA&oh=00_AYFY_45hY_4PVfp-MGFlWy43lLLke576W72yQocFWTjUZA&oe=67DA2772"
+            src="https://www.apetogentleman.com/wp-content/uploads/2021/08/best-all-white-outfits-men-1.jpg"
             alt="Men's collection"
             className="w-full h-[700px] object-cover"
           />
@@ -34,7 +34,7 @@ const GenderCollectionSection = () => {
               Men's Collections
             </h2>
             <Link
-              to={"collection/all?gender=men"}
+              to={"collections/all?gender=Men"}
               className="text-gray-900 underline"
             >
               Shop Now
