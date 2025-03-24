@@ -8,6 +8,7 @@ const {
   getAllorderController,
   getsingleOrderController,
   getUserOrderController,
+  orderUpdateController,
 } = require("../../Controllers/OrderController");
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.post("/cancel/:id", PaymentCencelController);
 router.get("/allorder", getAllorderController);
 router.get("/singleorder/:id", getsingleOrderController);
 router.get("/userorder/:userId", getUserOrderController);
+router.put("/update/:id", orderUpdateController);
 
 module.exports = router;

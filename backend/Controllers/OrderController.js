@@ -197,6 +197,35 @@ async function getUserOrderController(req, res) {
   }
 }
 
+async function orderUpdateController(req, res) {
+  const { id } = req.params;
+
+  try {
+    const order = await orderModel.findOneAndUpdate(
+      { _id: id },
+      { status: "Delivered" },
+      { new: true }
+    );
+    if (!order) {
+      return res.status(404).send({
+        success: false,
+        message: "order not found",
+      });
+    }
+
+    return res.status(200).send({
+      success: true,
+      message: "order update successfully",
+      data: order,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+
 module.exports = {
   orderCreateController,
   paymentSuccessController,
@@ -205,4 +234,5 @@ module.exports = {
   getAllorderController,
   getsingleOrderController,
   getUserOrderController,
+  orderUpdateController,
 };

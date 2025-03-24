@@ -21,7 +21,7 @@ export const createProduct = createAsyncThunk(
   async (productData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:4400/api/v1/admin/product",
+        "http://localhost:4400/api/v1/product/create",
         productData,
         {
           headers: {
@@ -42,7 +42,7 @@ export const updateProduct = createAsyncThunk(
   async ({ id, productData }, { rejectWithValue }) => {
     try {
       const response = await axios.patch(
-        `http://localhost:4400/api/v1/admin/product/${id}`,
+        `http://localhost:4400/api/v1/product/update/${id}`,
         productData,
         {
           headers: {
@@ -63,7 +63,7 @@ export const deleteProduct = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `http://localhost:4400/api/v1/admin/product/${id}`,
+        `http://localhost:4400/api/v1/product/delete/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

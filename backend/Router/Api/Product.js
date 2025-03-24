@@ -13,8 +13,8 @@ const { admin, protect } = require("../../Middleware/authMIddleware");
 const router = express.Router();
 
 router.post("/create", protect, admin, productCreateController);
-router.patch("/update/:id", protect, admin, productUpdateController);
-router.delete("/delete/:id", protect, admin, productDeleteController);
+router.patch("/update/:id", productUpdateController);
+router.delete("/delete/:id", productDeleteController);
 router.get("/allproduct", getALlProductController);
 router.get("/singleproduct/:id", getSingleProductController);
 router.get("/similar/:id", SimilarProductController);

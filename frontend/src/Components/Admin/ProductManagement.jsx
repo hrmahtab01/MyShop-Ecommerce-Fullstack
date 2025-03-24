@@ -1,23 +1,53 @@
-import React from "react";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 
 function ProductManagement() {
-  const products = [
-    {
-      _id: 12545,
-      name: "shirt",
-      price: 1455,
-      sku: "4644444",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loding, setLoding] = useState(false);
+
+  const fetchAllproduct = useCallback(() => {
+    axios
+      .get("http://localhost:4400/api/v1/product/allproduct")
+      .then((response) => {
+        setProducts(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  useEffect(() => {
+    fetchAllproduct();
+  }, [fetchAllproduct]);
 
   const HandleDelete = (id) => {
-    if (window.confirm("are you sure you want to delete this product ")) {
-      console.log(id);
-    }
+    setLoding(true);
+
+    axios
+      .delete(`http://localhost:4400/api/v1/product/delete/${id}`)
+      .then(() => {
+        toast.success("product deleted successfully", {
+          duration: 1000,
+        });
+        setTimeout(() => {
+          setLoding(false);
+        }, 1000);
+      })
+
+      .catch((error) => {
+        toast.error(error.response.data.message || "something went wrong", {
+          duration: 1000,
+        });
+        setTimeout(() => {
+          setLoding(false);
+        }, 1000);
+      });
   };
   return (
     <div className="max-w-7xl mx-auto p-6">
+      <toaser></toaser>
       <h2 className="text-2xl font-bold mb-6">Product Management</h2>
       <div className="overflow-x-auto shadow-md rounded-lg">
         <table className="min-w-full text-left text-gray-500">
@@ -48,12 +78,16 @@ function ProductManagement() {
                     >
                       Edit
                     </Link>
-                    <button
-                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 duration-300 cursor-pointer"
-                      onClick={() => HandleDelete(item._id)}
-                    >
-                      Delete
-                    </button>
+                    {loding ? (
+                      <span>Loading....</span>
+                    ) : (
+                      <button
+                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 duration-300 cursor-pointer"
+                        onClick={() => HandleDelete(item._id)}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))

@@ -1,6 +1,16 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { fetchproductDetils } from "../../../Slices/productSlice";
 
 const EditProductPage = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { selectedProduct, loading, error } = useSelector(
+    (state) => state.productData
+  );
   const [productData, setProductData] = useState({
     name: "",
     description: "",
@@ -24,20 +34,55 @@ const EditProductPage = () => {
     ],
   });
 
-  const HandleChange = (e) => {
+  const [upLoading, setUpLoading] = useState(false);
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchproductDetils(id));
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      selectedProduct(selectedProduct);
+    }
+  }, [selectedProduct]);
+
+  const HandleChange = async (e) => {
     const { name, value } = e.target;
     setProductData((prev) => ({ ...prev, [name]: value }));
   };
 
   const HandleImageUpload = async (e) => {
     const file = e.target.files[0];
-    console.log(file);
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      setUpLoading(true);
+      const response = await axios.post(
+        "http://localhost:4400/api/v1/upload",
+        formData
+      );
+      selectedProduct((prevdata) => ({
+        ...prevdata,
+        image: [
+          ...prevdata.images,
+          { url: response.data.imageUrl, altText: "" },
+        ],
+      }));
+      setUpLoading(false)
+    } catch (error) {}
   };
 
   const HandleSubmit = (e) => {
     e.preventDefault();
-    console.log(productData);
-    
+    axios
+      .patch(`http://localhost:4400/api/v1/product/update/${id}`, productData)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

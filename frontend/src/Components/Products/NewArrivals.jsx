@@ -62,7 +62,7 @@ const [newArrivals , setNewArrivals] = useState([]);
   useLayoutEffect(() => {
     fetchNewArrivals();
   }, []);
-console.log(newArrivals);
+
 
   return (
     <section>
@@ -75,7 +75,7 @@ console.log(newArrivals);
         <div className="slider-container">
           <Slider {...settings}>
             {newArrivals.map((item) => (
-              <div key={item._id} className="relative p-1.5">
+              <div  key={item._id} className="relative p-1.5">
                 {/* Added spacing using p-2 */ }
                 <img
                   src={item.images[0]?.url}

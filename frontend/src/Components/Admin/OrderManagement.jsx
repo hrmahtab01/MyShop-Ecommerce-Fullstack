@@ -17,8 +17,15 @@ function OrderManagement() {
     fetchAllOrder();
   }, []);
 
-  const HandleStatusChange = (orderid, status) => {
-    console.log({ id: orderid, status });
+  const HandleStatusChange = async (orderid) => {
+    axios
+      .put(`http://localhost:4400/api/v1/order/update/${orderid}`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -63,12 +70,16 @@ function OrderManagement() {
                     </select>
                   </th>
                   <th className="p-4">
-                    <button
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-900 duration-200"
-                      onClick={() => HandleStatusChange(item._id, "Delivered")}
-                    >
-                      Mark as Delivered
-                    </button>
+                    {item.status === "Delivered" ? (
+                      <span className="text-teal-500">Delivered</span>
+                    ) : (
+                      <button
+                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-900 duration-200"
+                        onClick={() => HandleStatusChange(item._id)}
+                      >
+                        Mark as Delivered
+                      </button>
+                    )}
                   </th>
                 </tr>
               ))

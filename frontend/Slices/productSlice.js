@@ -93,6 +93,7 @@ const productSlice = createSlice({
       material: "",
     },
   },
+  
   reducers: {
     setFilter: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
