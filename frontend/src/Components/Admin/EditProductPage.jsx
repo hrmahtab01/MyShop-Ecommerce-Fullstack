@@ -3,14 +3,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { fetchproductDetils } from "../../../Slices/productSlice";
+import { updateProduct } from "../../../Slices/AdminProductSlice";
 
 const EditProductPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { selectedProduct, loading, error } = useSelector(
     (state) => state.productData
   );
+
   const [productData, setProductData] = useState({
     name: "",
     description: "",
@@ -24,34 +27,32 @@ const EditProductPage = () => {
     collections: "",
     material: "",
     gender: "",
-    images: [
-      {
-        url: "https://i.pinimg.com/736x/c3/a8/9c/c3a89c72c320ae959835b28c6e1d8ad4.jpg",
-      },
-      {
-        url: "https://i.pinimg.com/736x/8c/d3/e1/8cd3e19ef44f3da329b7ee99a94465f0.jpg",
-      },
-    ],
+    images: [],
   });
 
   const [upLoading, setUpLoading] = useState(false);
+
+  // Fetch product details when component mounts
   useEffect(() => {
     if (id) {
       dispatch(fetchproductDetils(id));
     }
   }, [dispatch, id]);
 
+  // Update state when selectedProduct changes
   useEffect(() => {
     if (selectedProduct) {
-      selectedProduct(selectedProduct);
+      setProductData(selectedProduct);
     }
   }, [selectedProduct]);
 
-  const HandleChange = async (e) => {
+  // Handle input change
+  const HandleChange = (e) => {
     const { name, value } = e.target;
     setProductData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle Image Upload Fix
   const HandleImageUpload = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -62,33 +63,34 @@ const EditProductPage = () => {
         "http://localhost:4400/api/v1/upload",
         formData
       );
-      selectedProduct((prevdata) => ({
+      setProductData((prevdata) => ({
         ...prevdata,
-        image: [
+        images: [
           ...prevdata.images,
           { url: response.data.imageUrl, altText: "" },
         ],
       }));
-      setUpLoading(false)
-    } catch (error) {}
+      setUpLoading(false);
+    } catch (error) {
+      console.error(error);
+      setUpLoading(false);
+    }
   };
 
   const HandleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .patch(`http://localhost:4400/api/v1/product/update/${id}`, productData)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    dispatch(updateProduct({ id, productData }));
+    navigate("/admin/products");
   };
+
+  if (loading) return <h1>Loading...</h1>;
+  if (error) return <h1>Error: {error}</h1>;
 
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
       <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
       <form onSubmit={HandleSubmit}>
+        {/* Name */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">Product Name</label>
           <input
@@ -100,8 +102,10 @@ const EditProductPage = () => {
             required
           />
         </div>
+
+        {/* Description */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2"> Description</label>
+          <label className="block font-semibold mb-2">Description</label>
           <textarea
             onChange={HandleChange}
             name="description"
@@ -111,6 +115,8 @@ const EditProductPage = () => {
             required
           ></textarea>
         </div>
+
+        {/* Price */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">Price</label>
           <input
@@ -121,6 +127,8 @@ const EditProductPage = () => {
             className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
+
+        {/* Count In Stock */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">Count In Stock</label>
           <input
@@ -131,6 +139,8 @@ const EditProductPage = () => {
             className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
+
+        {/* SKU */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">SKU</label>
           <input
@@ -141,9 +151,11 @@ const EditProductPage = () => {
             className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
+
+        {/* Sizes */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">
-            Sizes (coma-separated)
+            Sizes (comma-separated)
           </label>
           <input
             type="text"
@@ -158,9 +170,11 @@ const EditProductPage = () => {
             className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
+
+        {/* Colors */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">
-            Colors (coma-separated)
+            Colors (comma-separated)
           </label>
           <input
             type="text"
@@ -175,21 +189,26 @@ const EditProductPage = () => {
             className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
+
+        {/* Upload Images */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">Upload Images</label>
           <input type="file" onChange={HandleImageUpload} />
+          {upLoading && <p> Image Uploading...</p>}
           <div className="gap-4 flex mb-4">
             {productData.images.map((img, index) => (
               <div key={index}>
                 <img
                   src={img.url}
-                  alt={img.alTtext || "product image"}
+                  alt={img.altText || "product image"}
                   className="w-20 h-20 object-cover rounded-md shadow-md"
                 />
               </div>
             ))}
           </div>
         </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors"

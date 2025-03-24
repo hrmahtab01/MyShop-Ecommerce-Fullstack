@@ -10,6 +10,7 @@ const {
   newArrivalsController,
 } = require("../../Controllers/ProductController");
 const { admin, protect } = require("../../Middleware/authMIddleware");
+
 const router = express.Router();
 
 router.post("/create", protect, admin, productCreateController);
