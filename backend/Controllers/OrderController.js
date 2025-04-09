@@ -109,7 +109,7 @@ async function paymentSuccessController(req, res) {
     const updateorder = await orderModel
       .findOneAndUpdate({ trans_id: id }, { paymentstatus: "paid" })
       .then(() => {
-        return res.redirect("http://localhost:5173/success");
+        return res.redirect("https://mangoshopp.netlify.app/success");
       });
   } catch (error) {
     return res.status(500).send({ success: false, message: error.message });
@@ -123,7 +123,7 @@ async function PaymentfailController(req, res) {
       trans_id: id,
     })
     .then(() => {
-      return res.redirect("http://localhost:5173/fail");
+      return res.redirect("https://mangoshopp.netlify.app/fail");
     });
 }
 
@@ -135,7 +135,7 @@ async function PaymentCencelController(req, res) {
       trans_id: id,
     })
     .then(() => {
-      return res.redirect("http://localhost:5173/cancel");
+      return res.redirect("https://mangoshopp.netlify.app/cancel");
     });
 }
 
