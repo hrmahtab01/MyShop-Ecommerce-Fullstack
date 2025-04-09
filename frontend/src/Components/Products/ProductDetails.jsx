@@ -25,7 +25,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchBestsellers = () => {
       axios
-        .get("http://localhost:4400/api/v1/product/best-seller")
+        .get("https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/best-seller")
         .then((result) => {
           setBestseller(result.data.data);
           setAllImages(result.data.data.images);
@@ -90,7 +90,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchsimilarProducts = () => {
       axios
-        .get(`http://localhost:4400/api/v1/product/similar/${bestseller._id}`)
+        .get(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/similar/${bestseller._id}`)
         .then((result) => {
           setSimilarProducts(result.data.data);
         })
@@ -104,7 +104,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchsingleProduct = () => {
       axios
-        .get(`http://localhost:4400/api/v1/product/singleproduct/${id}`)
+        .get(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/singleproduct/${id}`)
         .then((result) => {
           setBestseller(result.data.data);
           setAllImages(result.data.data.images);

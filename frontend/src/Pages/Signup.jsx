@@ -15,7 +15,7 @@ const Signup = () => {
     setLoading(true);
 
     axios
-      .post("http://localhost:4400/api/v1/auth/signup", {
+      .post("https://myshop-ecommerce-fullstack.onrender.com/api/v1/auth/signup", {
         name,
         email,
         password,

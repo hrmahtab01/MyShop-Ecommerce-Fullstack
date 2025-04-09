@@ -6,7 +6,7 @@ export const fetchAllorder = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "http://localhost:4400/api/v1/admin/orders",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/orders",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -27,7 +27,7 @@ export const updateOrderStatus = createAsyncThunk(
   async ({ id, status }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:4400/api/v1/admin/orders/${id}`,
+        `https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/orders/${id}`,
         { status },
         {
           headers: {
@@ -48,7 +48,7 @@ export const deleteOrder = createAsyncThunk(
   "adminorder/deleteOrder",
   async ({ id }, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:4400/api/v1/admin/orders/${id}`, {
+      await axios.delete(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/orders/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

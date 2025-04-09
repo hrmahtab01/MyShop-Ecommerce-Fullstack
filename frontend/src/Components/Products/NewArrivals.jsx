@@ -51,7 +51,7 @@ const [newArrivals , setNewArrivals] = useState([]);
   const fetchNewArrivals = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4400/api/v1/product/new-arrivals"
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/new-arrivals"
       );
       setNewArrivals(response.data.data); // Log data instead of full response
     } catch (error) {

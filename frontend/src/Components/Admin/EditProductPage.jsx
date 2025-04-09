@@ -60,7 +60,7 @@ const EditProductPage = () => {
     try {
       setUpLoading(true);
       const response = await axios.post(
-        "http://localhost:4400/api/v1/upload",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/upload",
         formData
       );
       setProductData((prevdata) => ({

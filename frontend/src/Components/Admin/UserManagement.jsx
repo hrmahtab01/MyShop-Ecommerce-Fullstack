@@ -19,7 +19,7 @@ const UserManagement = () => {
 
   const fetchAlluser = async () => {
   await axios
-      .get("http://localhost:4400/api/v1/auth/alluser")
+      .get("https://myshop-ecommerce-fullstack.onrender.com/api/v1/auth/alluser")
       .then((response) => {
         setAllUser(response.data.data);
       })
@@ -44,7 +44,7 @@ const UserManagement = () => {
   const Handlesubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://localhost:4400/api/v1/auth/signup", formData)
+      .post("https://myshop-ecommerce-fullstack.onrender.com/api/v1/auth/signup", formData)
       .then(() => {
         toast.success("user added successfully");
         setFormdata({
@@ -61,7 +61,7 @@ const UserManagement = () => {
 
   const handleUserRolechange = async (userid, newrole) => {
     await axios
-      .patch(`http://localhost:4400/api/v1/auth/update/${userid}`, {
+      .patch(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/auth/update/${userid}`, {
         role: newrole,
       })
       .then((response) => {
@@ -76,7 +76,7 @@ const UserManagement = () => {
   const HandleDeleteUser = async (userid) => {
     if (window.confirm("are you sure you want to delete this user")) {
       axios
-        .delete(`http://localhost:4400/api/v1/auth/delete/${userid}`)
+        .delete(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/auth/delete/${userid}`)
         .then((response) => {
           toast.success(response.data.message);
         })

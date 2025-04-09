@@ -39,7 +39,7 @@ const Checkout = () => {
   const Handleplaceorder = () => {
     setLoader(true);
     axios
-      .post("http://localhost:4400/api/v1/order/create", {
+      .post("https://myshop-ecommerce-fullstack.onrender.com/api/v1/order/create", {
         user: cartData.userId,
         name,
         email,

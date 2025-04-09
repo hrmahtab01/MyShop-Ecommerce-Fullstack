@@ -13,7 +13,7 @@ const CartDower = ({ cartdoweropen, Handlecartdowertoggole }) => {
   const HandleCheckout = () => {
     Handlecartdowertoggole();
     if (!userId) {
-      navigate("/login?redirect=checkout");
+      navigate("/login");
     } else {
       navigate("/checkout");
     }
@@ -36,14 +36,14 @@ const CartDower = ({ cartdoweropen, Handlecartdowertoggole }) => {
        
 
         {/* component for cart content */}
-        {cartData && cartData.products.length > 0 ?  (
+        {cartData && cartData.products?.length > 0 ?  (
           <Cartcontents cart={cartData} userId={userId} />
         ) : (
           <p>Your cart is empty</p>
         )}
       </div>
       <div className="p-4 bg-white sticky bottom-0">
-        {cartData && cartData.products.length > 0 &&  (
+        {cartData && cartData.products?.length > 0 &&  (
           <>
             <button
               onClick={HandleCheckout}

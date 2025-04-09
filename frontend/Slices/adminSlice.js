@@ -4,7 +4,7 @@ import { use } from "react";
 
 export const fetchAlluser = createAsyncThunk("admin/fetchAlluser", async () => {
   const response = await axios.get(
-    "http://localhost:4400/api/v1/admin/alluser",
+    "https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/alluser",
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -19,7 +19,7 @@ export const addUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:4400/api/v1/admin/adduser",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/adduser",
         userData,
         {
           headers: {
@@ -40,7 +40,7 @@ export const updateUser = createAsyncThunk(
   async ({ id, name, email, role }, { rejectWithValue }) => {
     try {
       const response = await axios.patch(
-        `http://localhost:4400/api/v1/admin/updateuser/${id}`,
+        `https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/updateuser/${id}`,
         { name, email, role },
         {
           headers: {
@@ -61,7 +61,7 @@ export const deleteUser = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `http://localhost:4400/api/v1/admin/delete/${id}`,
+        `https://myshop-ecommerce-fullstack.onrender.com/api/v1/admin/delete/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

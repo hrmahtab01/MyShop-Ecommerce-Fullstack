@@ -14,7 +14,7 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ userId, guestId }, { rejectWithValue }) => {
     try {
-      const response = axios.get(`http://localhost:4400/api/v1/cart/get`, {
+      const response = axios.get(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/cart/get`, {
         params: {
           userId,
           guestId,
@@ -36,7 +36,7 @@ export const addtoCart = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        "http://localhost:4400/api/v1/cart/create",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/cart/create",
         {
           productId,
           quantity,
@@ -62,7 +62,7 @@ export const updateCart = createAsyncThunk(
   ) => {
     try {
       const response = await axios.put(
-        "http://localhost:4400/api/v1/cart/increment",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/cart/increment",
         {
           productId,
           quantity,
@@ -85,7 +85,7 @@ export const removeFromCart = createAsyncThunk(
   async ({ productId, color, size, guestId, userId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        "http://localhost:4400/api/v1/cart/delete",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/cart/delete",
         {
           data: {
             productId,
@@ -109,7 +109,7 @@ export const margeCart = createAsyncThunk(
   async ({ guestId, userId }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:4400/api/v1/cart/marge",
+        "https://myshop-ecommerce-fullstack.onrender.com/api/v1/cart/marge",
         { guestId, userId },
         {
           headers: {

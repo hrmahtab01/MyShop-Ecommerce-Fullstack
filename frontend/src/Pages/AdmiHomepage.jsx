@@ -8,7 +8,7 @@ const AdmiHomepage = () => {
   const [allProduct, setAllProduct] = useState([]);
   const fetchAllOrders = async () => {
     axios
-      .get("http://localhost:4400/api/v1/order/allorder")
+      .get("https://myshop-ecommerce-fullstack.onrender.com/api/v1/order/allorder")
       .then((response) => {
         setAllOrders(response.data.data);
       })
@@ -28,7 +28,7 @@ const AdmiHomepage = () => {
 
   const fethcAllproduct = async () => {
     axios
-      .get("http://localhost:4400/api/v1/product/allproduct")
+      .get("https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/allproduct")
       .then((response) => {
         setAllProduct(response.data.data);
       })
@@ -40,40 +40,7 @@ const AdmiHomepage = () => {
     fethcAllproduct();
   }, []);
 
-  const order = [
-    {
-      _id: 1245,
-      user: {
-        name: "mango",
-      },
-      totalPrice: 1455,
-      status: "processing",
-    },
-    {
-      _id: 1245,
-      user: {
-        name: "mango",
-      },
-      totalPrice: 1455,
-      status: "processing",
-    },
-    {
-      _id: 1245,
-      user: {
-        name: "mango",
-      },
-      totalPrice: 1455,
-      status: "processing",
-    },
-    {
-      _id: 1245,
-      user: {
-        name: "mango",
-      },
-      totalPrice: 1455,
-      status: "processing",
-    },
-  ];
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h3 className="text-3xl font-bold mb-6">Admin Dashboard</h3>
@@ -84,14 +51,14 @@ const AdmiHomepage = () => {
         </div>
         <div className="p-4 shadow-md rounded-lg">
           <h2 className="text-xl font-semibold"> Total Orders</h2>
-          <p className="text-2xl">{allOrders.length}</p>
+          <p className="text-2xl">{allOrders?.length}</p>
           <Link to={"/admin/orders"} className="text-blue-500 hover:underline">
             Manage Orders
           </Link>
         </div>
         <div className="p-4 shadow-md rounded-lg">
           <h2 className="text-xl font-semibold"> Total Products</h2>
-          <p className="text-2xl">{allProduct.length}</p>
+          <p className="text-2xl">{allProduct?.length}</p>
           <Link
             to={"/admin/products"}
             className="text-blue-500 hover:underline"
@@ -113,7 +80,7 @@ const AdmiHomepage = () => {
               </tr>
             </thead>
             <tbody>
-              {allOrders.length > 0 ? (
+              {allOrders?.length > 0 ? (
                 allOrders.map((item) => (
                   <tr
                     key={item._id}

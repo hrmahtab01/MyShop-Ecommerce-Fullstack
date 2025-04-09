@@ -13,7 +13,7 @@ const MyOrderspage = () => {
 
   const fetchOrders = async () => {
     await axios
-      .get(`http://localhost:4400/api/v1/order/userorder/${userId}`)
+      .get(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/order/userorder/${userId}`)
       .then((response) => {
         setOrderData(response.data.data);
       })

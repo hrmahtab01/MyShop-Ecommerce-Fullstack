@@ -10,7 +10,7 @@ function ProductManagement() {
 
   const fetchAllproduct = useCallback(() => {
     axios
-      .get("http://localhost:4400/api/v1/product/allproduct")
+      .get("https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/allproduct")
       .then((response) => {
         setProducts(response.data.data);
       })
@@ -26,7 +26,7 @@ function ProductManagement() {
     setLoding(true);
 
     axios
-      .delete(`http://localhost:4400/api/v1/product/delete/${id}`)
+      .delete(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/delete/${id}`)
       .then(() => {
         toast.success("product deleted successfully", {
           duration: 1000,

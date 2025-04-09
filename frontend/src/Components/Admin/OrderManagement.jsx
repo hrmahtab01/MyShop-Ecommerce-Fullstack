@@ -6,7 +6,7 @@ function OrderManagement() {
   useEffect(() => {
     const fetchAllOrder = async () => {
       axios
-        .get("http://localhost:4400/api/v1/order/allorder")
+        .get("https://myshop-ecommerce-fullstack.onrender.com/api/v1/order/allorder")
         .then((response) => {
           setOrders(response.data.data);
         })
@@ -19,7 +19,7 @@ function OrderManagement() {
 
   const HandleStatusChange = async (orderid) => {
     axios
-      .put(`http://localhost:4400/api/v1/order/update/${orderid}`)
+      .put(`https://myshop-ecommerce-fullstack.onrender.com/api/v1/order/update/${orderid}`)
       .then((response) => {
         console.log(response);
       })

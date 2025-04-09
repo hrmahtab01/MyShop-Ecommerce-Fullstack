@@ -33,7 +33,7 @@ export const fetchAllproducts = createAsyncThunk(
     if (material) quary.append("material", material);
 
     const response = await axios.get(
-      `http://localhost:4400/api/v1/product/allproduct?${quary.toString()}`
+      `https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/allproduct?${quary.toString()}`
     );
     return response.data.data;
   }
@@ -43,7 +43,7 @@ export const fetchproductDetils = createAsyncThunk(
   "product/fetchproductDetils",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:4400/api/v1/product/singleproduct/${id}`
+      `https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/singleproduct/${id}`
     );
     return response.data.data;
   }
@@ -53,7 +53,7 @@ export const updateProduct = createAsyncThunk(
   "product/updateProduct",
   async ({ id, productData }) => {
     const response = await axios.patch(
-      `http://localhost:4400/api/v1/product/update/${id}`,
+      `https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/update/${id}`,
       productData
     );
     return response.data;
@@ -64,7 +64,7 @@ export const fetchSimilarProduct = createAsyncThunk(
   "product/fetchSimilarProduct",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:4400/api/v1/product/similar/${id}`
+      `https://myshop-ecommerce-fullstack.onrender.com/api/v1/product/similar/${id}`
     );
     return response.data.data;
   }

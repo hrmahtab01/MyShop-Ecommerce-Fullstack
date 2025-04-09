@@ -5,26 +5,7 @@ import { updateCart } from "../../../Slices/cartSlice";
 
 const Cartcontents = ({ cart, userId }) => {
   const dispatch = useDispatch();
-  const Cartitem = [
-    {
-      productId: "1",
-      name: "t-shirt",
-      size: "M",
-      color: "red",
-      quantity: "1",
-      price: 500,
-      image: "https://picsum.photos/200?ramdom=1",
-    },
-    {
-      productId: "2",
-      name: "Jeans",
-      size: "Lg",
-      color: "black",
-      quantity: "2",
-      price: 1500,
-      image: "https://picsum.photos/200?ramdom=2",
-    },
-  ];
+ 
   const handleAddToCart = (productId, delta, size, color, quantity) => {
     const newquantity = quantity + delta;
 
